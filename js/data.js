@@ -16,7 +16,7 @@ window.TEAM_DATA = [
                 experience: '9+ Years experience',
                 stack: 'AWS SageMaker, LangChain, OpenAI API',
                 tags: ['Python', 'RAG', 'LLMOps'],
-                photo: 'https://i.pravatar.cc/820?img=12'
+                photo: 'images/team/img-12.webp'
             },
             {
                 name: 'Clara Hoffmann',
@@ -24,7 +24,7 @@ window.TEAM_DATA = [
                 experience: '11+ Years experience',
                 stack: 'TypeScript, React, WebGL',
                 tags: ['Design Systems', 'Perf', 'a11y'],
-                photo: 'https://i.pravatar.cc/820?img=47'
+                photo: 'images/team/img-47.webp'
             },
             {
                 name: 'Rohan Pillai',
@@ -32,7 +32,7 @@ window.TEAM_DATA = [
                 experience: '7+ Years experience',
                 stack: 'Kubernetes, Terraform, Envoy',
                 tags: ['Go', 'Docker', 'CI/CD'],
-                photo: 'https://i.pravatar.cc/820?img=68'
+                photo: 'images/team/img-68.webp'
             },
             {
                 name: 'Yuki Tanaka',
@@ -40,7 +40,7 @@ window.TEAM_DATA = [
                 experience: '6+ Years experience',
                 stack: 'Go, Postgres, gRPC',
                 tags: ['Go', 'Postgres', 'Kafka'],
-                photo: 'https://i.pravatar.cc/820?img=45'
+                photo: 'images/team/img-45.webp'
             },
             {
                 name: 'Amara Okafor',
@@ -48,7 +48,7 @@ window.TEAM_DATA = [
                 experience: '13+ Years experience',
                 stack: 'Distributed systems, Rust, C++',
                 tags: ['Rust', 'Systems', 'Review'],
-                photo: 'https://i.pravatar.cc/820?img=44'
+                photo: 'images/team/img-44.webp'
             }
         ]
     },
@@ -63,7 +63,7 @@ window.TEAM_DATA = [
                 experience: '8+ Years experience',
                 stack: 'Figma, Tokens, Storybook',
                 tags: ['Systems', 'Tokens', 'Docs'],
-                photo: 'https://i.pravatar.cc/820?img=32'
+                photo: 'images/team/img-32.webp'
             },
             {
                 name: 'Daniel Ek',
@@ -71,7 +71,7 @@ window.TEAM_DATA = [
                 experience: '10+ Years experience',
                 stack: 'Research, Prototyping, IA',
                 tags: ['UX', 'Research', 'Mobile'],
-                photo: 'https://i.pravatar.cc/820?img=11'
+                photo: 'images/team/img-11.webp'
             },
             {
                 name: 'Nadia Haddad',
@@ -79,7 +79,7 @@ window.TEAM_DATA = [
                 experience: '6+ Years experience',
                 stack: 'After Effects, Lottie, SVG',
                 tags: ['Motion', 'Brand', '3D'],
-                photo: 'https://i.pravatar.cc/820?img=49'
+                photo: 'images/team/img-49.webp'
             },
             {
                 name: 'Oliver Brandt',
@@ -87,7 +87,7 @@ window.TEAM_DATA = [
                 experience: '9+ Years experience',
                 stack: 'WCAG 2.2, ARIA, Audit',
                 tags: ['a11y', 'Audit', 'Training'],
-                photo: 'https://i.pravatar.cc/820?img=13'
+                photo: 'images/team/img-13.webp'
             }
         ]
     },
@@ -102,7 +102,7 @@ window.TEAM_DATA = [
                 experience: '12+ Years experience',
                 stack: 'Discovery, Pricing, Strategy',
                 tags: ['Strategy', 'Pricing', 'GTM'],
-                photo: 'https://i.pravatar.cc/820?img=10'
+                photo: 'images/team/img-10.webp'
             },
             {
                 name: 'Tomas Lindqvist',
@@ -110,7 +110,7 @@ window.TEAM_DATA = [
                 experience: '8+ Years experience',
                 stack: 'APIs, Analytics, Roadmaps',
                 tags: ['APIs', 'Analytics', 'Planning'],
-                photo: 'https://i.pravatar.cc/820?img=15'
+                photo: 'images/team/img-15.webp'
             },
             {
                 name: 'Grace Mutiso',
@@ -118,7 +118,7 @@ window.TEAM_DATA = [
                 experience: '5+ Years experience',
                 stack: 'SQL, dbt, Looker',
                 tags: ['SQL', 'dbt', 'Metrics'],
-                photo: 'https://i.pravatar.cc/820?img=26'
+                photo: 'images/team/img-26.webp'
             }
         ]
     },
@@ -133,7 +133,7 @@ window.TEAM_DATA = [
                 experience: '9+ Years experience',
                 stack: 'Snowflake, Airflow, dbt',
                 tags: ['Snowflake', 'dbt', 'ELT'],
-                photo: 'https://i.pravatar.cc/820?img=5'
+                photo: 'images/team/img-5.webp'
             },
             {
                 name: 'Marcus Bell',
@@ -141,7 +141,7 @@ window.TEAM_DATA = [
                 experience: '7+ Years experience',
                 stack: 'PyTorch, MLflow, Triton',
                 tags: ['PyTorch', 'Serving', 'MLOps'],
-                photo: 'https://i.pravatar.cc/820?img=53'
+                photo: 'images/team/img-53.webp'
             },
             {
                 name: 'Lucia Ferreira',
@@ -149,7 +149,7 @@ window.TEAM_DATA = [
                 experience: '6+ Years experience',
                 stack: 'BigQuery, Looker, Python',
                 tags: ['BigQuery', 'Looker', 'Python'],
-                photo: 'https://i.pravatar.cc/820?img=25'
+                photo: 'images/team/img-25.webp'
             },
             {
                 name: 'Sam Whitfield',
@@ -157,7 +157,7 @@ window.TEAM_DATA = [
                 experience: '10+ Years experience',
                 stack: 'AppSec, IAM, SOC 2',
                 tags: ['AppSec', 'IAM', 'SOC 2'],
-                photo: 'https://i.pravatar.cc/820?img=58'
+                photo: 'images/team/img-58.webp'
             }
         ]
     }

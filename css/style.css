@@ -457,7 +457,7 @@ section { position: relative; }
 /* Oversized stroked "outline" wordmark */
 .hero-outline {
     font-size: clamp(74px, 15.5vw, 150px);
-    font-weight: 800;
+    font-weight: 700;
     letter-spacing: -0.02em;
     line-height: 1;
     text-transform: uppercase;

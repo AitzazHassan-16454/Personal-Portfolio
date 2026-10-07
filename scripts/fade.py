@@ -55,3 +55,11 @@ for y in range(h):
 
 im.save(SRC)
 print("faded %d px, size %s -> %s" % (changed, (w, h), SRC))
+
+# WebP sibling: 496 KB -> 37 KB at q86, alpha preserved. index.html prefers it
+# via <picture> and falls back to the PNG above.
+webp = SRC[:-4] + ".webp"
+im.save(webp, "WEBP", quality=86, method=6)
+import os
+print("wrote %s (%d KB, png was %d KB)"
+      % (webp, os.path.getsize(webp) // 1024, os.path.getsize(SRC) // 1024))

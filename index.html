@@ -32,10 +32,9 @@
   <meta name="twitter:image" content="https://example.com/og.png">
 -->
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+<!-- Poppins is self-hosted (css/fonts.css + fonts/) — no third-party origin. -->
+<link rel="preload" href="fonts/poppins-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -279,16 +278,19 @@
         <div class="talent-grid">
             <!-- Left: Person Image (Background Removed) -->
             <div class="talent-media js-reveal">
-                <img
-                    src="images/talent-cutout.png"
-                    alt="Senior Engineer"
-                    class="talent-image"
-                    data-depth="-46"
-                    data-tilt="5"
-                    loading="lazy"
-                    width="480"
-                    height="450"
-                >
+                <picture>
+                    <source srcset="images/talent-cutout.webp" type="image/webp">
+                    <img
+                        src="images/talent-cutout.png"
+                        alt="Senior Engineer"
+                        class="talent-image"
+                        data-depth="-46"
+                        data-tilt="5"
+                        loading="lazy"
+                        width="480"
+                        height="450"
+                    >
+                </picture>
             </div>
 
             <!-- Right: Text Content -->
@@ -855,17 +857,28 @@
 <script src="js/main.js"></script>
 <script src="js/motion3d.js"></script>
 
-<!-- Three.js is fetched last and asynchronously: the tilt / flip / parallax
-     layer above is already live, so a slow or blocked CDN only costs the
-     decorative hero scene. -->
+<!-- three.js is fetched last, asynchronously, and only where it can be seen:
+     the tilt / flip / parallax layer above needs none of it, so phones,
+     coarse pointers, Save-Data and reduced-motion skip the 655 KB entirely. -->
 <script type="module">
-    import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js')
-        .then(function (THREE) {
-            if (window.Motion3D) window.Motion3D.initWebGL(THREE);
-        })
-        .catch(function () {
-            document.documentElement.classList.add('no-webgl');
-        });
+    var mq = window.matchMedia || function () { return { matches: false }; };
+    var skip =
+        mq('(pointer: coarse)').matches ||
+        mq('(prefers-reduced-motion: reduce)').matches ||
+        window.innerWidth < 992 ||
+        (navigator.connection && navigator.connection.saveData);
+
+    if (skip) {
+        document.documentElement.classList.add('no-webgl');
+    } else {
+        import('./js/vendor/three.module.min.js')
+            .then(function (THREE) {
+                if (window.Motion3D) window.Motion3D.initWebGL(THREE);
+            })
+            .catch(function () {
+                document.documentElement.classList.add('no-webgl');
+            });
+    }
 </script>
 </body>
 </html>

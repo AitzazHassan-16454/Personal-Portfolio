@@ -251,7 +251,11 @@
         var canvas = document.getElementById('heroCanvas');
         var hero = document.querySelector('.hero');
         if (!canvas || !hero || !THREE || Motion3D.webgl) return;
-        if (reduced() || !webglSupported()) {
+        var mq = window.matchMedia || function () { return { matches: false }; };
+        if (reduced() || !webglSupported() ||
+            mq('(pointer: coarse)').matches ||
+            (navigator.connection && navigator.connection.saveData) ||
+            window.innerWidth < 992) {
             document.documentElement.classList.add('no-webgl');
             return;
         }
@@ -273,7 +277,7 @@
         var INK = 0x16161d;
         var PAPER = 0xf4f8f5;
 
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
         renderer.setClearAlpha(0);
 
         var scene = new THREE.Scene();
