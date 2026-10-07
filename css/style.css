@@ -1,0 +1,1698 @@
+/* =============================================================================
+   PORTFOLIO — design system + components
+   Aesthetic reference: smartworking.io
+   Extracted tokens: bg #16161D · accent #FF4D04 · text #F4F8F5 · Poppins
+   ============================================================================= */
+
+/* ── Tokens ─────────────────────────────────────────────────────────────── */
+:root {
+    --bg:            #16161D;
+    --bg-deep:       #030303;
+    --bg-panel:      rgba(22, 22, 29, 0.80);
+    --bg-tag:        rgba(22, 22, 29, 0.55);
+
+    --accent:        #FF4D04;
+    --accent-soft:   rgba(255, 77, 4, 0.12);
+    --accent-line:   rgba(255, 77, 4, 0.40);
+
+    --text:          #F4F8F5;
+    --muted:         rgba(244, 248, 245, 0.62);
+    --line:          rgba(244, 248, 245, 0.10);
+    --line-strong:   #4A4A4A;
+
+    --container:     1180px;
+    --radius:        4px;
+    --radius-sm:     3px;
+
+    /* Motion vocabulary reused across every component */
+    --ease:          cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-out:      cubic-bezier(0.22, 1, 0.36, 1);
+    --dur-fast:      0.2s;
+    --dur:           0.3s;
+    --dur-slow:      0.42s;
+    --dur-img:       0.4s;
+    --dur-curtain:   0.55s;
+}
+
+/* ── Reset ──────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 300;
+    line-height: 1.5;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+ul { list-style: none; }
+
+::selection { background: var(--accent); color: #fff; }
+
+/* ── Layout ─────────────────────────────────────────────────────────────── */
+.container {
+    width: 100%;
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: 20px;
+}
+
+section { position: relative; }
+
+/* Section heading — the recurring "orange lead-in / white emphasis" pattern */
+.section-heading {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 300;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+    text-align: center;
+    margin-bottom: 16px;
+}
+.section-heading span { font-weight: 600; color: var(--text); }
+
+.section-sub {
+    font-size: clamp(15px, 2vw, 22px);
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--text);
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto;
+    opacity: 0.85;
+}
+
+.section-pad { padding: 100px 0; }
+
+/* ── Buttons ────────────────────────────────────────────────────────────── */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 11px 30px;
+    transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+    white-space: nowrap;
+}
+.btn:hover { background: var(--accent); color: #fff; }
+
+/* Solid variant inverts the hover: fill → outline */
+.btn--solid {
+    background: var(--accent);
+    color: #fff;
+    padding: 12px 40px;
+}
+.btn--solid:hover { background: #fff; color: var(--accent); }
+
+/* Arrow nudge on hover */
+.btn .arrow { transition: transform var(--dur) var(--ease); }
+.btn:hover .arrow { transform: translateX(5px); }
+
+/* =============================================================================
+   HEADER — floating rounded pill, sticky, blur backdrop
+   ============================================================================= */
+.site-header {
+    position: sticky;
+    top: 40px;
+    z-index: 5000;
+    width: 98%;
+    margin: 40px auto 0;
+    padding: 14px 20px;
+    background: rgba(22, 22, 29, 0.90);
+    border-radius: var(--radius);
+    transition: top 0.35s var(--ease), background 0.35s var(--ease);
+    isolation: isolate;
+}
+
+/* Backdrop blur layer pinned behind the translucent bar */
+.site-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    backdrop-filter: blur(10px);
+    z-index: -1;
+}
+
+/* Pinned state — once scrolled past, flush to the top edge */
+.site-header.is-pinned {
+    top: 0;
+    border-bottom: 1px solid var(--line-strong);
+    border-radius: 0;
+}
+
+/* The mega panel is fixed to the viewport, so it needs its own offset when
+   the header pins — otherwise a ~50px gap opens between the two surfaces. */
+.site-header.is-pinned .mega-panel { top: 86px; }
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #fff;
+    flex-shrink: 0;
+}
+.logo-mark {
+    width: 26px;
+    height: 26px;
+    display: grid;
+    place-items: center;
+    background: var(--accent);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+}
+
+/* Nav */
+.nav { display: flex; align-items: center; gap: 4px; }
+
+.nav-item { position: relative; }
+
+.nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 300;
+    color: #fff;
+    border-radius: var(--radius-sm);
+    transition: color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.nav-link:hover { color: var(--accent); }
+
+.nav-chevron {
+    width: 11px;
+    height: 11px;
+    transition: transform 0.25s var(--ease);
+}
+.nav-item.active .nav-chevron { transform: rotate(180deg); }
+
+/* ── Mega panel: clip-path curtain drop from the top edge ────────────────── */
+.mega-panel {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 130px;
+    width: 98%;
+    margin-inline: auto;
+    padding: 34px 34px 34px 0;
+    background: rgba(22, 22, 29, 0.90);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line-strong);
+    border-bottom-left-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+    z-index: 5001;
+
+    /* hidden: collapsed upward + inert */
+    opacity: 0;
+    pointer-events: none;
+    clip-path: inset(0 0 100% 0);
+    transition:
+        clip-path var(--dur-curtain) var(--ease-out),
+        opacity 0.3s ease;
+}
+
+/* visible: curtain lifts */
+.nav-item.active .mega-panel {
+    opacity: 1;
+    pointer-events: all;
+    clip-path: inset(0 0 0 0);
+}
+
+/* Header flattens its bottom corners while a panel is open, so the two
+   shapes read as one continuous surface */
+.site-header:has(.nav-item.active) {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.mega-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 44px;
+}
+
+.mega-col-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+}
+
+.mega-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 0;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text);
+    transition: transform var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.mega-link:hover { transform: translateX(6px); color: var(--accent); }
+
+.mega-link img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    opacity: 0.7;
+    transition: opacity 0.15s ease;
+}
+.mega-link:hover img { opacity: 1; }
+
+/* ── Mobile nav ─────────────────────────────────────────────────────────── */
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    padding: 8px 6px;
+    background: transparent;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-sm);
+}
+
+/* Three lines that morph into an X */
+.ham-line {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    transform-origin: center;
+    transition: transform 0.3s, opacity 0.3s;
+}
+.nav-toggle.open .ham-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle.open .ham-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.nav-toggle.open .ham-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    z-index: 4999;
+}
+.drawer-overlay.visible { opacity: 1; visibility: visible; }
+
+.drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(340px, 88vw);
+    background: var(--bg-deep);
+    z-index: 5002;
+    transform: translateX(-100%);
+    transition: transform 0.35s var(--ease);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+.drawer.open { transform: translateX(0); }
+
+.drawer-head {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: var(--bg-deep);
+    border-bottom: 2px solid var(--accent);
+}
+
+.drawer-close {
+    display: grid;
+    place-items: center;
+    padding: 4px;
+    color: #fff;
+}
+
+.drawer-cta {
+    display: flex;
+    gap: 10px;
+    padding: 20px;
+    border-bottom: 1px solid #333;
+}
+.drawer-cta .btn { flex: 1; }
+
+.drawer-nav { padding: 6px 0; flex: 1; }
+
+/* Accordion row */
+.acc-item { border-bottom: 1px solid #333; }
+
+.acc-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 20px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: left;
+}
+.acc-chevron {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+    transition: transform 0.25s var(--ease);
+}
+.acc-item.open .acc-chevron { transform: rotate(180deg); }
+
+.acc-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s var(--ease);
+}
+.acc-panel-inner { padding: 4px 20px 20px; }
+.acc-panel-inner .mega-link { padding: 6px 0; }
+
+/* =============================================================================
+   HERO
+   ============================================================================= */
+.hero {
+    padding: 90px 0 70px;
+    text-align: center;
+}
+
+.hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    margin-bottom: 26px;
+    border: 0.5px solid var(--accent-line);
+    border-radius: 100px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+.hero-eyebrow .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2.4s var(--ease) infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1;   transform: scale(1); }
+    50%      { opacity: 0.4; transform: scale(0.75); }
+}
+
+.hero-top {
+    font-size: clamp(30px, 5.2vw, 65px);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+.hero-top span {
+    display: block;
+    font-size: clamp(19px, 3.1vw, 40px);
+    font-weight: 300;
+    margin-top: -6px;
+}
+
+/* Oversized stroked "outline" wordmark */
+.hero-outline {
+    font-size: clamp(74px, 15.5vw, 150px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    text-transform: uppercase;
+    color: transparent;
+    -webkit-text-stroke: 3px var(--text);
+    text-shadow: 0 0 16px rgba(0, 0, 0, 0.75);
+    margin: 6px 0 10px;
+}
+
+/* Cross-fading headline slot — JS swaps .active every 3s */
+.swap-wrap { position: relative; height: 52px; }
+
+.swap-heading {
+    position: absolute;
+    inset: 0;
+    font-size: clamp(20px, 2.7vw, 40px);
+    font-weight: 300;
+    line-height: 48px;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+.swap-heading.active { opacity: 1; }
+.swap-heading b { font-weight: 600; color: #fff; }
+
+.hero-desc {
+    font-size: clamp(15px, 1.6vw, 17px);
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 620px;
+    margin: 0 auto 34px;
+    color: var(--muted);
+}
+
+.hero-actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Hero stat strip */
+.hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    margin-top: 70px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+.hero-stat {
+    background: var(--bg);
+    padding: 26px 18px;
+    transition: background var(--dur) var(--ease);
+}
+.hero-stat:hover { background: rgba(255, 77, 4, 0.06); }
+.hero-stat-value {
+    font-size: clamp(26px, 3.4vw, 40px);
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--accent);
+    letter-spacing: -0.03em;
+}
+.hero-stat-label {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--muted);
+    margin-top: 4px;
+}
+
+/* =============================================================================
+   TALENT PANEL — Tech Talent as a Service
+   ============================================================================= */
+.talent-panel {
+    position: relative;
+    padding: 100px 0 80px;
+    overflow: hidden;
+}
+
+/* Ambient glow subtle background lighting */
+.talent-panel::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    width: 600px;
+    height: 600px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(255, 77, 4, 0.08), transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.talent-panel .container {
+    position: relative;
+    z-index: 1;
+}
+
+.talent-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: clamp(40px, 5vw, 68px);
+}
+
+.talent-media {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.talent-image {
+    display: block;
+    width: 100%;
+    max-width: 480px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 18px 34px rgba(0, 0, 0, 0.35));
+}
+
+.talent-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 640px;
+}
+
+.talent-eyebrow {
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 12px;
+    opacity: 0.92;
+}
+
+.talent-heading {
+    font-size: clamp(30px, 3.8vw, 42px);
+    font-weight: 300;
+    line-height: 1.22;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 24px;
+}
+
+.talent-heading span {
+    font-weight: 600;
+    color: var(--accent);
+}
+
+.talent-body {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    font-size: clamp(14px, 1.05vw, 15px);
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--text);
+    opacity: 0.9;
+}
+
+.talent-body p {
+    margin: 0;
+}
+
+.talent-punchline {
+    color: var(--text);
+    font-weight: 400;
+    opacity: 1;
+}
+
+/* =============================================================================
+   LOGO MARQUEE — track is duplicated, translateX(-50%) = exactly one set
+   ============================================================================= */
+.marquee-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 26px 0;
+    /* faint side fades so logos dissolve at the edges */
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+.marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee var(--marquee-dur, 26s) linear infinite;
+}
+.marquee-wrap:hover .marquee-track { animation-play-state: paused; }
+
+@keyframes marquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.marquee-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 34px;
+    flex-shrink: 0;
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    opacity: 0.45;
+    white-space: nowrap;
+    transition: opacity var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.marquee-item:hover { opacity: 1; color: var(--accent); }
+.marquee-item i {
+    width: 7px;
+    height: 7px;
+    background: var(--accent);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* =============================================================================
+   VALUE CARDS (3-up)
+   ============================================================================= */
+.value-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 26px;
+    margin-top: 56px;
+}
+
+.value-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 40px 28px;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    transition: background var(--dur) var(--ease), transform var(--dur-slow) var(--ease);
+}
+.value-card:hover {
+    background: var(--accent-soft);
+    transform: translateY(-6px);
+}
+
+.value-icon {
+    width: 56px;
+    height: 56px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 22px;
+    border: 1px solid var(--accent-line);
+    border-radius: 50%;
+    color: var(--accent);
+    transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.value-card:hover .value-icon { background: var(--accent); color: #fff; }
+
+.value-title {
+    font-size: 24px;
+    font-weight: 300;
+    color: var(--text);
+    margin-bottom: 12px;
+}
+.value-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin-bottom: 22px;
+}
+.value-foot {
+    margin-top: auto;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+}
+
+/* =============================================================================
+   SKILLS — icon crossfade on hover
+   ============================================================================= */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+    margin-top: 56px;
+}
+
+.skill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: default;
+}
+
+/* Two stacked SVGs: normal hidden by default, hover shown on hover */
+.icon-wrap {
+    position: relative;
+    width: 96px;
+    height: 96px;
+    margin-bottom: 22px;
+    flex-shrink: 0;
+}
+.icon-wrap svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.3s ease, transform 0.3s var(--ease);
+}
+.icon-wrap .icon-hover { opacity: 0; transform: scale(0.82) rotate(-8deg); }
+.skill:hover .icon-normal { opacity: 0; transform: scale(0.82) rotate(8deg); }
+.skill:hover .icon-hover  { opacity: 1; transform: scale(1) rotate(0); }
+
+.skill-title {
+    font-size: 30px;
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 12px;
+    transition: color 0.3s ease;
+}
+.skill:hover .skill-title { color: var(--accent); }
+
+.skill-text { font-size: 14px; line-height: 1.55; max-width: 240px; color: var(--muted); }
+.skill-text b { display: block; font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+
+/* =============================================================================
+   ★ TEAM SECTION — the signature hover interaction
+   -----------------------------------------------------------------------------
+   Idle state is a bare B&W portrait with an orange name. Hover does four
+   things at once:
+     1. grayscale photo crossfades to the colour photo   (opacity .4s)
+     2. name recolours orange → off-white               (color .3s)
+     3. a dark info panel + tag row + CTA rise from below the card's bottom
+        edge (transform .42s cubic-bezier(.4,0,.2,1))
+     4. "Book a call" brightens on its own hover        (opacity .2s)
+
+   The slide distance is NOT hardcoded: JS measures the extras block and sets
+   --nhp-hide to its height + 8px, so the hidden panel is clipped exactly at
+   the card's bottom edge regardless of how many tag pills wrap.
+   ============================================================================= */
+.team { padding: 100px 0 70px; }
+
+/* ── Filter tabs ────────────────────────────────────────────────────────── */
+.team-tabs {
+    display: flex;
+    align-items: flex-end;
+    gap: 0;
+    margin-top: 64px;
+    border-bottom: 1px solid var(--line);
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.team-tabs::-webkit-scrollbar { display: none; }
+
+.team-tab {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 0 12px;
+    margin-right: 48px;
+    flex-shrink: 0;
+    position: relative;
+    bottom: -1px;
+    border-bottom: 2px solid transparent;
+    opacity: 0.55;
+    transition: border-color var(--dur-fast) ease, opacity var(--dur-fast) ease;
+}
+.team-tab:last-child { margin-right: 0; }
+.team-tab:hover { opacity: 0.85; }
+.team-tab.active {
+    opacity: 1;
+    border-bottom-color: var(--accent);
+}
+
+.team-tab-icon {
+    width: 24px;
+    height: 32px;
+    flex-shrink: 0;
+    pointer-events: none;
+}
+.team-tab-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+}
+
+/* ── Panels ─────────────────────────────────────────────────────────────── */
+.team-panel { display: none; }
+.team-panel.active { display: block; }
+
+/* Horizontal scroller. Also the drag surface (cursor: grab). */
+.cards-scroll {
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 48px 0 24px;
+    cursor: grab;
+    -webkit-overflow-scrolling: touch;
+}
+/* Nothing to drag when the row fits — don't advertise a grab hand */
+.cards-scroll:not(.can-scroll) { cursor: default; }
+.cards-scroll.is-dragging { cursor: grabbing; }
+.cards-scroll.is-dragging * { user-select: none; }
+
+/* Scrollbar only appears when the row actually overflows (JS sets .can-scroll) */
+.cards-scroll.can-scroll { scrollbar-width: thin; scrollbar-color: var(--accent) rgba(244, 248, 245, 0.1); }
+.cards-scroll.can-scroll::-webkit-scrollbar { height: 3px; }
+.cards-scroll:not(.can-scroll)::-webkit-scrollbar { display: none; }
+.cards-scroll.can-scroll::-webkit-scrollbar-track { background: rgba(244, 248, 245, 0.1); border-radius: 2px; }
+.cards-scroll.can-scroll::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+.cards {
+    display: flex;
+    gap: 18px;
+    width: max-content;
+}
+
+/* ── Member card ────────────────────────────────────────────────────────── */
+.card {
+    position: relative;
+    width: 307px;
+    height: 472px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: var(--radius);
+}
+
+/* Full-bleed photo layers, stacked and crossfaded */
+.card-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    border-radius: var(--radius);
+    transition: opacity var(--dur-img) ease;
+}
+.card-photo--bw    { opacity: 1; z-index: 0; filter: grayscale(100%); }
+.card-photo--color { opacity: 0; z-index: 1; }
+
+.card:hover .card-photo--bw    { opacity: 0; }
+.card:hover .card-photo--color { opacity: 1; }
+
+/* Top vignette keeps the orange name legible over any photo */
+.card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    background: linear-gradient(to bottom, rgba(22, 22, 29, 0.6) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.card-name {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    z-index: 3;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 28px;
+    color: var(--accent);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color var(--dur) ease;
+}
+.card:hover .card-name { color: var(--text); }
+
+/* The element that actually animates. No background here — the dark panel
+   below is a child, so only the rows sit on the scrim while the tag pills
+   float directly over the photo. */
+.card-slide {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+
+    /* --nhp-hide is set by JS: extras height + 8px */
+    transform: translateY(var(--nhp-hide, 140px));
+    transition: transform var(--dur-slow) var(--ease);
+}
+.card:hover .card-slide { transform: translateY(0); }
+
+.card-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 16px;
+    background: var(--bg-panel);
+    border-radius: 6px;
+}
+
+.card-info-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 27px;
+    flex-shrink: 0;
+}
+
+.card-prompt { flex-shrink: 0; }
+
+.card-info-text {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 22px;
+    color: rgba(244, 248, 245, 0.9);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Extras sit outside the dark panel — no scrim behind them */
+.card-extras { display: flex; flex-direction: column; padding-top: 8px; }
+
+.card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-bottom: 8px;
+}
+.card-tag {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text);
+    background: var(--bg-tag);
+    border: 1px solid rgba(244, 248, 245, 0.28);
+    border-radius: var(--radius-sm);
+    padding: 3px 9px;
+    white-space: nowrap;
+    transition: background var(--dur-fast) ease, border-color var(--dur-fast) ease, color var(--dur-fast) ease;
+}
+.card-tag:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+}
+
+.card-book {
+    display: block;
+    padding: 10px 0;
+    background: var(--accent);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    border-radius: var(--radius-sm);
+    transition: opacity var(--dur-fast) ease, background var(--dur-fast) ease;
+}
+.card-book:hover { opacity: 0.88; background: #ff6a2a; }
+
+/* Section footer CTA */
+.team-cta { text-align: center; margin-top: 52px; }
+.team-cta-heading { font-size: 22px; font-weight: 400; color: var(--text); margin-bottom: 6px; }
+.team-cta-body { font-size: 15px; font-weight: 300; color: var(--text); }
+.team-cta-link {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-weight: 300;
+    transition: opacity var(--dur-fast) ease;
+}
+.team-cta-link:hover { opacity: 0.8; }
+
+/* =============================================================================
+   WORK — hover-expand flex-grow accordion panels
+   ============================================================================= */
+.work-section {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 60px);
+    min-height: 620px;
+    overflow: hidden;
+}
+
+.work-panels {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    position: relative;
+    margin-top: 46px;
+}
+
+.work-panel {
+    position: relative;
+    flex: 0 0 180px;
+    overflow: hidden;
+    transform: translateZ(0);
+    transition: flex-grow 0.75s var(--ease);
+    cursor: pointer;
+}
+.work-panel.active { flex-grow: 1; }
+
+/* B&W backdrop visible; colour backdrop revealed on activation */
+.work-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.7s ease;
+}
+.work-bg--bw    { z-index: 0; opacity: 1; }
+.work-bg--color { z-index: 1; opacity: 0; }
+.work-panel.active .work-bg--bw    { opacity: 0; }
+.work-panel.active .work-bg--color { opacity: 1; }
+
+/* Bottom-up gradient scrim for text contrast */
+.work-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(22, 22, 29, 0.55) 0%, rgba(22, 22, 29, 0) 54%);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Content fades + rises in once expanded, with a delay so it reads as
+   following the width change rather than competing with it */
+.work-content {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 50px;
+    min-width: 620px;
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    overflow: hidden;
+    transition: opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s;
+}
+.work-panel.active .work-content {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* "Next" arrow — appears on the active panel, nudges right on hover */
+.work-arrow {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    width: 26px;
+    height: 26px;
+    z-index: 5;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease, transform 0.3s ease;
+}
+.work-panel.active .work-arrow { opacity: 1; }
+.work-panel.active:hover .work-arrow { transform: translateX(6px); }
+
+.work-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+.work-pipe { font-size: 34px; font-weight: 300; line-height: 1; color: var(--accent); }
+.work-title {
+    font-size: clamp(24px, 3vw, 40px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+    color: var(--text);
+}
+
+.work-quote {
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.55;
+    color: var(--text);
+    margin-bottom: 8px;
+    max-width: 640px;
+}
+.work-author {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    margin-bottom: 22px;
+}
+
+.work-stats { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 26px; }
+
+.work-stat-box {
+    background: rgba(22, 22, 29, 0.9);
+    padding: 20px 26px;
+    border-radius: var(--radius);
+    text-align: center;
+    transition: background var(--dur) var(--ease);
+}
+.work-stat-box:hover { background: var(--accent); }
+.work-stat-box:hover .work-stat-value,
+.work-stat-box:hover .work-stat-sub { color: #fff; }
+
+.work-stat-value {
+    font-size: 34px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--accent);
+    white-space: nowrap;
+    transition: color var(--dur) var(--ease);
+}
+.work-stat-sub { font-size: 13px; font-weight: 300; color: var(--accent); transition: color var(--dur) var(--ease); }
+
+/* =============================================================================
+   PROCESS — vertical steps with a scroll-driven connector
+   ============================================================================= */
+.process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    margin-top: 56px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.process-step {
+    background: var(--bg);
+    padding: 34px 26px;
+    position: relative;
+    transition: background var(--dur) var(--ease);
+}
+.process-step:hover { background: rgba(255, 77, 4, 0.06); }
+
+.process-num {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 16px;
+}
+.process-title { font-size: 20px; font-weight: 400; color: var(--text); margin-bottom: 10px; }
+.process-text { font-size: 14px; line-height: 1.6; color: var(--muted); }
+
+/* =============================================================================
+   FAQ accordion
+   ============================================================================= */
+.faq-list { margin-top: 48px; }
+
+.faq-item { border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+.faq-item.is-open { border-bottom-color: transparent; }
+
+.faq-question {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px 0;
+    text-align: left;
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    transition: color 0.25s ease, font-size 0.25s ease, font-weight 0.25s ease;
+}
+.faq-question:hover { color: var(--accent); }
+
+.faq-item.is-open .faq-question {
+    color: var(--accent);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.faq-chevron {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: var(--accent);
+    transition: transform 0.3s ease;
+}
+.faq-item.is-open .faq-chevron { transform: rotate(180deg); }
+
+.faq-answer-wrap {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+.faq-answer-inner {
+    margin-bottom: 2px;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.35s ease 0.05s, transform 0.35s ease 0.05s;
+}
+.faq-item.is-open .faq-answer-inner { opacity: 1; transform: translateY(0); }
+
+/* Open answer becomes a solid accent block */
+.faq-answer-inner {
+    background: var(--accent);
+    padding: 24px 28px;
+    margin-bottom: 14px;
+    border-radius: var(--radius-sm);
+    color: #fff;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* =============================================================================
+   REVEAL ON SCROLL
+   ============================================================================= */
+.js-reveal { opacity: 0; transform: translateY(24px); }
+.js-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.6s var(--ease), transform 0.6s var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+    }
+    .js-reveal { opacity: 1; transform: none; }
+}
+
+/* =============================================================================
+   CTA BAND + FOOTER
+   ============================================================================= */
+.cta-band {
+    position: relative;
+    padding: 100px 0;
+    text-align: center;
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+}
+.cta-band::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 720px;
+    height: 720px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(255, 77, 4, 0.16), transparent 68%);
+    pointer-events: none;
+}
+.cta-band > * { position: relative; }
+.cta-title {
+    font-size: clamp(28px, 4.4vw, 46px);
+    font-weight: 300;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    margin-bottom: 14px;
+}
+.cta-title b { font-weight: 700; color: var(--accent); }
+.cta-text { font-size: 16px; color: var(--muted); margin-bottom: 32px; }
+
+.site-footer {
+    background: var(--bg-deep);
+    border-top: 1px solid #222;
+    padding: 60px 0 30px;
+}
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.6fr repeat(3, 1fr);
+    gap: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #222;
+}
+.footer-brand p { font-size: 14px; line-height: 1.7; color: #aba4a4; margin-top: 16px; max-width: 300px; }
+.footer-col-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+}
+.footer-link {
+    display: block;
+    padding: 5px 0;
+    font-size: 14px;
+    font-weight: 300;
+    color: #aba4a4;
+    transition: transform var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.footer-link:hover { transform: translateX(5px); color: var(--accent); }
+
+.footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-top: 26px;
+    font-size: 13px;
+    color: #6f6f6f;
+}
+.footer-socials { display: flex; gap: 10px; }
+.social-btn {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid #333;
+    border-radius: var(--radius-sm);
+    color: #aba4a4;
+    transition: all var(--dur) var(--ease);
+}
+.social-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateY(-3px); }
+
+/* =============================================================================
+   RESPONSIVE
+   ============================================================================= */
+@media (max-width: 1024px) {
+    .work-content { min-width: 0; }
+}
+
+@media (max-width: 991px) {
+    .site-header { top: 20px; margin-top: 20px; width: 94%; padding: 12px 16px; }
+    .site-header.is-pinned { top: 0; width: 100%; border-radius: 0; }
+
+    .nav, .header-cta { display: none; }
+    .nav-toggle { display: flex; }
+
+    .section-pad, .team { padding: 70px 0 50px; }
+
+    .talent-panel { padding: 60px 0 40px; }
+    .talent-grid { grid-template-columns: 1fr; gap: 36px; }
+    .talent-media { max-width: 380px; margin: 0 auto; }
+    .talent-image { max-width: 380px; height: auto; }
+    .talent-eyebrow { font-size: 16px; }
+
+    .hero { padding: 50px 0 40px; }
+    .hero-stats { grid-template-columns: repeat(2, 1fr); margin-top: 50px; }
+    .swap-wrap { height: 76px; }
+    .swap-heading { line-height: 1.35; }
+
+    .value-grid { grid-template-columns: 1fr; gap: 18px; margin-top: 40px; }
+    .value-card { padding: 28px 22px; }
+
+    .skills-grid { grid-template-columns: repeat(2, 1fr); gap: 36px 20px; }
+    .skill-title { font-size: 24px; }
+
+    /* --- TEAM: hover reveals become always-on, since touch has no hover --- */
+    .team-tabs { margin-top: 40px; }
+    .team-tab { margin-right: 28px; }
+
+    /* Break the scroller out of the padded container to full viewport width */
+    .cards-scroll {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        padding: 32px 20px 24px;
+    }
+    .cards-scroll.can-scroll { scrollbar-width: none; }
+    .cards-scroll.can-scroll::-webkit-scrollbar { height: 0; }
+
+    .card { width: 260px; height: 400px; }
+
+    .card-name { font-size: 18px; color: var(--text); }
+    .card-slide { transform: translateY(0) !important; }
+    .card-panel { padding: 12px 14px; }
+
+    /* Touch has no :hover, so the photo crossfade and the slide-up can never
+       fire. Commit both to their end states so the cards are fully readable
+       without interaction. */
+    .card-photo--bw    { opacity: 0; }
+    .card-photo--color { opacity: 1; }
+
+    .work-section { height: auto; }
+    .work-panels { flex-direction: column; margin-top: 34px; }
+    .work-panel { flex: none !important; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+    .work-panel:hover { flex: none !important; }
+    .work-arrow { display: none; }
+    .work-content {
+        position: relative;
+        inset: auto;
+        min-width: 0;
+        opacity: 1;
+        transform: none;
+        max-height: 0;
+        padding: 0;
+        overflow: hidden;
+        transition: max-height 0.45s ease, padding 0.35s ease;
+    }
+    .work-panel.active .work-content { max-height: 1000px; padding: 32px 26px; }
+    .work-head { margin-bottom: 12px; }
+    .work-title { font-size: 22px; }
+    .work-quote { font-size: 14px; }
+    .work-stat-box { padding: 14px 16px; flex: 1 1 auto; }
+    .work-stat-value { font-size: 24px; }
+    .work-stat-sub { font-size: 11px; white-space: normal; }
+
+    .process-grid { grid-template-columns: 1fr; }
+
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+}
+
+@media (max-width: 560px) {
+    .talent-media { max-width: 280px; margin: 0 auto; }
+    .talent-image { max-width: 280px; height: auto; }
+    .talent-heading { font-size: 26px; }
+    .talent-body { font-size: 14px; gap: 14px; }
+    .hero-stats { grid-template-columns: 1fr; }
+    .hero-actions .btn { width: 100%; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; align-items: flex-start; }
+}
+
+/* =============================================================================
+   3D MOTION LAYER — pointer tilt · scroll depth · card flip · hero WebGL
+   -----------------------------------------------------------------------------
+   Progressive enhancement. js/motion3d.js opts elements in by adding .tilt
+   (plus .reveal-3d on elements that already carry .js-reveal), and every
+   animated value lives in a custom property — so with the script blocked the
+   page renders exactly as it did before, and with prefers-reduced-motion on,
+   nothing moves at all.
+
+   Custom properties used below:
+     --rx / --ry    pointer tilt              --lift      hover lift
+     --mx / --my    pointer position (gloss)  --persp     tilt distance
+     --reveal-y / --rx-in / --ry-in           scroll-in entrance
+     --p / --depth / --dt                     scroll parallax ([data-depth])
+   ============================================================================= */
+
+/* ── Tilt: the shared transform ──────────────────────────────────────────── */
+.tilt,
+.js-reveal.reveal-3d {
+    transform:
+        perspective(var(--persp, 1100px))
+        translate3d(0, calc(var(--reveal-y, 0px) + var(--lift, 0px)), 0)
+        rotateX(var(--rx, 0deg))
+        rotateY(var(--ry, 0deg));
+}
+
+/* Entrance variant — unwinds from a tipped-forward, dropped position */
+.js-reveal.reveal-3d {
+    opacity: 0;
+    transform:
+        perspective(var(--persp, 1100px))
+        translate3d(0, calc(var(--reveal-y, 26px) + var(--lift, 0px)), 0)
+        rotateX(calc(var(--rx-in, 9deg) + var(--rx, 0deg)))
+        rotateY(calc(var(--ry-in, -5deg) + var(--ry, 0deg)));
+    transition: opacity 0.6s var(--ease-out) var(--d, 0s),
+                transform 0.8s var(--ease-out) var(--d, 0s),
+                background var(--dur) var(--ease);
+}
+.js-reveal.reveal-3d.is-visible {
+    --reveal-y: 0px;
+    --rx-in: 0deg;
+    --ry-in: 0deg;
+    opacity: 1;
+}
+
+/* Rest state eases back; while the pointer is down on it, follow 1:1 */
+.tilt { transition: transform 0.45s var(--ease-out); }
+.tilt.is-tilting,
+.reveal-3d.is-tilting {
+    transition: transform 0.12s linear,
+                opacity 0.6s var(--ease-out) var(--d, 0s),
+                background var(--dur) var(--ease);
+}
+
+/* Transitions that were already on these elements have to survive .tilt */
+.btn.tilt          { transition: transform 0.45s var(--ease-out),
+                                 background var(--dur) var(--ease),
+                                 color var(--dur) var(--ease); }
+.hero-stat.tilt    { transition: transform 0.45s var(--ease-out),
+                                 background var(--dur) var(--ease); }
+.process-step.tilt { transition: transform 0.45s var(--ease-out),
+                                 background var(--dur) var(--ease); }
+
+/* Hover lift, expressed as a variable so it composes with the tilt */
+.value-card:hover,
+.skill:hover,
+.hero-stat:hover,
+.process-step:hover { --lift: -7px; }
+.btn:hover          { --lift: -4px; }
+.card:hover         { --lift: -6px; }
+
+/* Gloss that tracks the pointer across the card face */
+.tilt-shine { position: relative; }
+.tilt-shine::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%),
+                                rgba(255, 255, 255, 0.10), transparent 62%);
+    opacity: 0;
+    transition: opacity 0.35s var(--ease);
+    pointer-events: none;
+    z-index: 2;
+}
+.tilt-shine.is-tilting::after { opacity: 1; }
+
+/* ── Scroll depth: parallax + a slow tip as blocks cross the viewport ───── */
+[data-depth] {
+    transform: perspective(1100px)
+                translate3d(0, calc(var(--p, 0) * var(--depth, 40px)), 0)
+                rotateX(calc(var(--p, 0) * var(--dt, 0deg)));
+    will-change: transform;
+}
+
+/* ── 3D flip: the value cards turn over to "in practice" ────────────────── */
+.value-card {
+    position: relative;
+    perspective: 1200px;
+}
+.flip-inner {
+    position: relative;
+    width: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.7s var(--ease);
+}
+.value-card.is-flipped .flip-inner { transform: rotateY(180deg); }
+
+.flip-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.flip-front {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.flip-back {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+    transform: rotateY(180deg);
+    background: linear-gradient(165deg, rgba(255, 77, 4, 0.20) 0%, rgba(22, 22, 29, 0.95) 62%);
+    border-radius: var(--radius);
+}
+
+.flip-index {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+}
+.flip-title {
+    font-size: 21px;
+    font-weight: 300;
+    line-height: 1.3;
+    color: var(--text);
+    margin-bottom: 12px;
+}
+.flip-text {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--muted);
+}
+
+.flip-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 20px;
+    padding: 8px 16px;
+    border: 1px dashed var(--accent-line);
+    border-radius: 100px;
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    transition: background var(--dur) var(--ease), color var(--dur) var(--ease),
+                border-color var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.flip-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    border-style: solid;
+    color: #fff;
+    transform: translateY(-2px);
+}
+.flip-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* ── Hero WebGL layer ───────────────────────────────────────────────────── */
+.hero-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    /* Opacity is driven by motion3d.js every frame (intro fade + scroll fade),
+       so it must not be transitioned here or every update lags behind. */
+    opacity: 0;
+    -webkit-mask-image: radial-gradient(ellipse 64% 60% at 50% 46%, #000 30%, transparent 100%);
+            mask-image: radial-gradient(ellipse 64% 60% at 50% 46%, #000 30%, transparent 100%);
+}
+.no-webgl .hero-canvas { display: none; }
+
+.hero > .container {
+    position: relative;
+    z-index: 1;
+}
+
+/* ── Reduced motion: keep the layout, drop the movement ─────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .tilt,
+    .js-reveal.reveal-3d,
+    [data-depth] {
+        transform: none;
+    }
+    .js-reveal.reveal-3d { opacity: 1; }
+    .hero-canvas { display: none; }
+}
+
+/* ── Small screens: shallower perspective, less travel ──────────────────── */
+@media (max-width: 991px) {
+    .js-reveal.reveal-3d {
+        transform: translate3d(0, calc(var(--reveal-y, 26px) + var(--lift, 0px)), 0)
+                   rotateX(calc(var(--rx-in, 5deg) + var(--rx, 0deg)))
+                   rotateY(calc(var(--ry-in, -3deg) + var(--ry, 0deg)));
+    }
+    [data-depth] { transform: none; }
+    .tilt-shine { display: none; }
+}
