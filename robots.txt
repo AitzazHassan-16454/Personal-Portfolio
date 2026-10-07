@@ -1,0 +1,9 @@
+# robots.txt — https://example.com/
+#
+# TODO: replace example.com with the real domain when the site is deployed,
+#       then delete this comment.
+User-agent: *
+Allow: /
+
+# Sitemap (also needs the real domain):
+# Sitemap: https://example.com/sitemap.xml
