@@ -5,5 +5,5 @@
 User-agent: *
 Allow: /
 
-# Sitemap (also needs the real domain):
-# Sitemap: https://example.com/sitemap.xml
+# Sitemap:
+Sitemap: https://example.com/sitemap.xml

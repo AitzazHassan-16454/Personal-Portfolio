@@ -1111,6 +1111,11 @@ section { position: relative; }
     transform: translateY(0);
     pointer-events: auto;
 }
+/* .work-content is the panel's link — make it reachable by keyboard */
+.work-content:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -6px;
+}
 
 /* "Next" arrow — appears on the active panel, nudges right on hover */
 .work-arrow {

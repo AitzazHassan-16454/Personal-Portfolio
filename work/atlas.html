@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atlas — observability console · Case study · Aria Novak</title>
+<meta name="description" content="Turning forty-one dashboards into one screen an on-call engineer can read at 3am. The brief, the rendering problem behind 1.2M spans a day, and the outcome.">
+<meta name="theme-color" content="#16161D">
+
+<!-- Icons -->
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="../favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+
+<!-- Share cards — these work without a domain (title/description text card). -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Aria Novak">
+<meta property="og:title" content="Atlas — observability console">
+<meta property="og:description" content="One screen an on-call engineer can read at 3am. MTTD down 52%, Lighthouse 98 at 1.2M spans a day.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Atlas — observability console">
+<meta name="twitter:description" content="One screen an on-call engineer can read at 3am. MTTD down 52%, Lighthouse 98 at 1.2M spans a day.">
+<!-- TODO: once the site has a domain, add canonical / og:url / og:image here too
+     (see the commented block in index.html and the README). -->
+
+<!-- Poppins is self-hosted (css/fonts.css + fonts/) — no third-party origin. -->
+<link rel="preload" href="../fonts/poppins-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../css/fonts.css">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/case.css">
+<noscript><style>.js-reveal{opacity:1;transform:none}</style></noscript>
+</head>
+
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     HEADER — slim variant: this page only needs a way back and a way out.
+     ═══════════════════════════════════════════════════════════════════ -->
+<header class="site-header" id="siteHeader">
+    <div class="header-inner">
+        <a href="../index.html" class="logo">
+            <span class="logo-mark">A</span>
+            Aria&nbsp;Novak
+        </a>
+        <nav class="nav site-nav">
+            <a class="nav-link" href="../index.html#work">Work</a>
+            <a class="nav-link" href="../index.html#skills">Skills</a>
+            <a class="nav-link" href="../index.html#process">Process</a>
+            <a class="nav-link" href="../index.html#contact">Contact</a>
+        </nav>
+        <a href="mailto:hello@example.com" class="btn" data-contact="email" data-contact-label>hello@example.com</a>
+    </div>
+</header>
+
+
+<main id="top" style="--case-accent: linear-gradient(140deg,#1f6feb,#0b2545)">
+
+    <!-- ── Hero ── -->
+    <section class="case-hero">
+        <div class="container">
+            <a class="case-crumb js-reveal" href="../index.html#work">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                All work
+            </a>
+
+            <p class="case-kicker js-reveal">Case study — Northbeam</p>
+            <h1 class="case-title js-reveal" data-depth="16">Atlas<br><b>observability console</b></h1>
+            <p class="case-lede js-reveal">
+                Northbeam had forty-one dashboards and no answer to the only question that
+                matters at 03:00: <em>is it just me?</em> Atlas is one screen that answers it —
+                traffic, errors, latency and saturation, with a trace one click away.
+            </p>
+
+            <div class="case-rule js-reveal" data-depth="-30"></div>
+
+            <dl class="case-meta js-reveal">
+                <div><dt>Role</dt><dd>Staff Engineer</dd></div>
+                <div><dt>Company</dt><dd>Northbeam</dd></div>
+                <div><dt>Year</dt><dd>2025</dd></div>
+                <div><dt>Timeline</dt><dd>5 months</dd></div>
+            </dl>
+        </div>
+    </section>
+
+    <!-- ── Client quote ── -->
+    <section class="case-quote-band">
+        <div class="container">
+            <blockquote class="case-quote js-reveal" data-depth="-44" data-tilt="4">
+                "Atlas turned a wall of charts into a single screen an on-call engineer
+                can read at 3am. Mean time to detect dropped by more than half the
+                quarter we shipped it."
+            </blockquote>
+            <p class="case-quote-author js-reveal">Staff Engineer · Northbeam</p>
+        </div>
+    </section>
+
+    <!-- ── 01 The brief ── -->
+    <section class="case-section">
+        <div class="container case-grid">
+            <div class="case-label js-reveal">01 — The brief
+                <span>Forty-one dashboards, zero answers, and an on-call rotation that had stopped trusting any of them.</span>
+            </div>
+            <div class="case-body js-reveal">
+                <p>
+                    Every team at Northbeam had built the dashboard it needed. Collectively that
+                    came to forty-one of them, and by the third week of an on-call shift an
+                    engineer knew which six were worth opening. The other thirty-five were
+                    decoration.
+                </p>
+                <p>
+                    The cost showed up in the incident timeline. Of a median
+                    <strong>14-minute</strong> time to detect, most of it was spent establishing
+                    whether the problem was real at all — flipping between six tools, trying to
+                    agree with yourself before you paged anyone.
+                </p>
+                <p>
+                    The data was already there, at full fidelity. What was missing was a screen
+                    built around the <strong>question</strong> rather than around the metrics
+                    each team happened to own.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── 02 What I built ── -->
+    <section class="case-section">
+        <div class="container case-grid">
+            <div class="case-label js-reveal">02 — What I built
+                <span>Golden signals on one screen, and a trace one click from wherever you were standing.</span>
+            </div>
+            <div class="case-body js-reveal">
+                <p>
+                    Atlas opens to a single table: one row per service, four columns — traffic,
+                    errors, latency, saturation. Nothing else competes for attention until you
+                    ask for it.
+                </p>
+                <ul class="case-list">
+                    <li><b>Golden-signals overview</b> — every service on one screen, with the
+                        delta that matters (vs. one hour ago) instead of a sparkline you have to
+                        interpret.</li>
+                    <li><b>Trace-first drill-down</b> — service → endpoint → span waterfall →
+                        the exact request. The path from "something is wrong" to "this is the
+                        query" is three clicks and no context switch.</li>
+                    <li><b>Streamed aggregation</b> — the browser never receives raw spans.
+                        Rollups are computed server-side and the first rows stream in before the
+                        query finishes.</li>
+                    <li><b>Canvas waterfall, virtualized tables</b> — 1.2M spans a day rendered
+                        without a janky scroll. The waterfall is one canvas, not twelve thousand
+                        DOM nodes.</li>
+                    <li><b>Perf budget in CI</b> — Lighthouse ≥ 95 or the build fails. We
+                        shipped at 98 and have stayed there.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── 03 The hard part ── -->
+    <section class="case-section">
+        <div class="container case-grid">
+            <div class="case-label js-reveal">03 — The hard part
+                <span>Rendering a lot of data fast, and staying readable when the reader is exhausted.</span>
+            </div>
+            <div class="case-body js-reveal">
+                <h3>Legibility is the hard part, not volume</h3>
+                <p>
+                    It is easy to ship a console that plots everything. The discipline was
+                    refusing to: every element on the overview had to earn its place by changing
+                    what an engineer would <strong>do next</strong>. That cut roughly two thirds
+                    of what the first prototype showed.
+                </p>
+
+                <h3>Cold cache, hot incident</h3>
+                <p>
+                    The first meaningful paint of the screen is under 400ms and p95 query latency
+                    is 200ms — measured on a cold cache, because that is the state you are in
+                    during an incident, not the state you are in when you demo it. Achieved by
+                    streaming partial rollups rather than waiting for a complete answer.
+                </p>
+
+                <h3>Readability at 03:00</h3>
+                <p>
+                    No colour-only encoding (one of Northbeam's on-call engineers is
+                    colour-blind), monospace numerals so columns align when scanning, and
+                    nothing that flashes. Contrast targets follow WCAG AA on the dark palette
+                    the tool ships with by default — because the people using it are in a dark
+                    room at an hour when a white background is physically unpleasant.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── 04 Outcome ── -->
+    <section class="case-section case-outcome">
+        <div class="container case-grid">
+            <div class="case-label js-reveal">04 — Outcome
+                <span>Detected in half the time, at full data volume, under a budget that is enforced.</span>
+            </div>
+            <div class="case-body js-reveal">
+                <div class="work-stats">
+                    <div class="work-stat-box">
+                        <div class="work-stat-value">52%</div>
+                        <div class="work-stat-sub">Faster MTTD</div>
+                    </div>
+                    <div class="work-stat-box">
+                        <div class="work-stat-value">1.2M</div>
+                        <div class="work-stat-sub">Spans/day</div>
+                    </div>
+                    <div class="work-stat-box">
+                        <div class="work-stat-value">98</div>
+                        <div class="work-stat-sub">Lighthouse</div>
+                    </div>
+                </div>
+
+                <p>
+                    Mean time to detect fell <strong>52%</strong> in the quarter Atlas shipped.
+                    The old dashboards were not deleted — they became drill-downs, reachable
+                    from the row they used to own.
+                </p>
+                <p>
+                    The performance budget is the part that outlasted the project: it is a line
+                    in CI, so the number has not drifted. <strong>1.2M spans a day</strong> at
+                    Lighthouse 98, and an on-call screen that answers the question before the
+                    engineer has finished asking it.
+                </p>
+
+                <ul class="case-tags">
+                    <li>TypeScript</li><li>React</li><li>Go</li><li>PostgreSQL</li>
+                    <li>Kubernetes</li><li>CI/CD</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Adjacent case studies ── -->
+    <nav class="case-next">
+        <div class="container case-grid">
+            <a class="js-reveal" href="ledger.html">
+                <div class="dir">← Previous case study</div>
+                <div class="name">Ledger — reconciliation engine</div>
+            </a>
+            <a class="js-reveal" href="relay.html">
+                <div class="dir">Next case study →</div>
+                <div class="name">Relay — messaging infrastructure</div>
+            </a>
+        </div>
+    </nav>
+
+    <!-- ── CTA ── -->
+    <section class="cta-band" id="contact">
+        <div class="container">
+            <h2 class="cta-title js-reveal">Got a problem worth <b>solving properly?</b></h2>
+            <p class="cta-text js-reveal">Send the brief, the rough version, or one paragraph. All three are fine.</p>
+            <div class="js-reveal" style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+                <a href="mailto:hello@example.com" class="btn btn--solid" data-contact="email" data-contact-label>hello@example.com</a>
+                <a href="../index.html#work" class="btn">Browse the work</a>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════════════════════════════ -->
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-bottom">
+            <span>© 2026 Aria Novak. Built from scratch.</span>
+            <div style="display:flex;gap:18px;flex-wrap:wrap">
+                <a href="../index.html#work" class="footer-link">All work</a>
+                <a href="#" class="footer-link" data-contact="github">GitHub</a>
+                <a href="#" class="footer-link" data-contact="linkedin">LinkedIn</a>
+                <a href="mailto:hello@example.com" class="footer-link" data-contact="email">Email</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="../js/site-config.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/motion3d.js"></script>
+</body>
+</html>

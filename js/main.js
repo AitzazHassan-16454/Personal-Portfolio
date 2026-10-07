@@ -146,6 +146,10 @@
         var headings = Array.prototype.slice.call(wrap.querySelectorAll('.swap-heading'));
         if (headings.length < 2) return;
 
+        // The cross-fade is a CSS transition, but the rotation is a content
+        // change — reduced motion means leaving the first headline alone.
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
         var current = 0;
         setInterval(function () {
             headings[current].classList.remove('active');
@@ -162,6 +166,11 @@
 
         function run(el) {
             var target = parseInt(el.dataset.count, 10) || 0;
+            // Reduced motion: show the number we were going to count to.
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                el.textContent = target;
+                return;
+            }
             var duration = 1400;
             var start = null;
 

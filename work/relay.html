@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relay — messaging infrastructure · Case study · Aria Novak</title>
+<meta name="description" content="Carrying a realtime gateway from 200 to 40,000 concurrent connections without a single breaking change to the client SDK. The brief, the hard part, and the outcome.">
+<meta name="theme-color" content="#16161D">
+
+<!-- Icons -->
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="../favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+
+<!-- Share cards — these work without a domain (title/description text card). -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Aria Novak">
+<meta property="og:title" content="Relay — messaging infrastructure">
+<meta property="og:description" content="200 to 40,000 concurrent connections with zero breaking changes. p99 delivery 11ms.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Relay — messaging infrastructure">
+<meta name="twitter:description" content="200 to 40,000 concurrent connections with zero breaking changes. p99 delivery 11ms.">
+<!-- TODO: once the site has a domain, add canonical / og:url / og:image here too
+     (see the commented block in index.html and the README). -->
+
+<!-- Poppins is self-hosted (css/fonts.css + fonts/) — no third-party origin. -->
+<link rel="preload" href="../fonts/poppins-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../css/fonts.css">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/case.css">
+<noscript><style>.js-reveal{opacity:1;transform:none}</style></noscript>
+</head>
+
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     HEADER — slim variant: this page only needs a way back and a way out.
+     ═══════════════════════════════════════════════════════════════════ -->
+<header class="site-header" id="siteHeader">
+    <div class="header-inner">
+        <a href="../index.html" class="logo">
+            <span class="logo-mark">A</span>
+            Aria&nbsp;Novak
+        </a>
+        <nav class="nav site-nav">
+            <a class="nav-link" href="../index.html#work">Work</a>
+            <a class="nav-link" href="../index.html#skills">Skills</a>
+            <a class="nav-link" href="../index.html#process">Process</a>
+            <a class="nav-link" href="../index.html#contact">Contact</a>
+        </nav>
+        <a href="mailto:hello@example.com" class="btn" data-contact="email" data-contact-label>hello@example.com</a>
+    </div>
+</header>
+
+
+<main id="top" style="--case-accent: linear-gradient(140deg,#9b51e0,#2b0f45)">
+
+    <!-- ── Hero ── -->
+    <section class="case-hero">
+        <div class="container">
+            <a class="case-crumb js-reveal" href="../index.html#work">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                All work
+            </a>
+
+            <p class="case-kicker js-reveal">Case study — Relay</p>
+            <h1 class="case-title js-reveal" data-depth="16">Relay<br><b>messaging infrastructure</b></h1>
+            <p class="case-lede js-reveal">
+                The gateway started at 200 connections and worked beautifully. Real customers
+                arrived, and by 2,000 connections the p99 delivery curve went vertical. Relay
+                carries 40,000 now — and no client integration had to change.
+            </p>
+
+            <div class="case-rule js-reveal" data-depth="-30"></div>
+
+            <dl class="case-meta js-reveal">
+                <div><dt>Role</dt><dd>Founding Engineer</dd></div>
+                <div><dt>Company</dt><dd>Relay</dd></div>
+                <div><dt>Year</dt><dd>2023</dd></div>
+                <div><dt>Timeline</dt><dd>9 months</dd></div>
+            </dl>
+        </div>
+    </section>
+
+    <!-- ── Client quote ── -->
+    <section class="case-quote-band">
+        <div class="container">
+            <blockquote class="case-quote js-reveal" data-depth="-44" data-tilt="4">
+                "We carried Relay from 200 to 40,000 concurrent connections without
+                touching the client SDK. That was the whole point of the redesign."
+            </blockquote>
+            <p class="case-quote-author js-reveal">Founding Engineer · Relay</p>
+        </div>
+    </section>
+
+    <!-- ── 01 The brief ── -->
+    <section class="case-section">
+        <div class="container case-grid">
+            <div class="case-label js-reveal">01 — The brief
+                <span>A demo-scale gateway, and fourteen live integrations we were not allowed to break.</span>
+            </div>
+            <div class="case-body js-reveal">
+                <p>
+                    The original gateway was a single event loop behind a global lock, and at the
+                    scale it was designed for that was the right call — simple, correct, and fast
+                    enough. It stayed correct well past the scale it was designed for, which is
+                    how these things usually go.
+                </p>
+                <p>
+                    Around <strong>2,000 concurrent connections</strong> the p99 delivery time
+                    stopped being a number and became a cliff. One slow consumer could hold the
+                    lock long enough to stall every other connection on the box, and the failure
+                    looked like network trouble from the outside.
+                </p>
+                <p>
+                    The constraint shaped every decision after it: the client SDK's public API was
+                    already shipped, and <strong>fourteen customer integrations were live against
+                    it</strong>. We could not ask anyone to upgrade, and we could not ship a flag
+                    day. Whatever we built had to make the old path keep working.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── 02 What I built ── -->
+    <section class="case-section">
+        <div class="container case-grid">
+            <div class="case-label js-reveal">02 — What I built
+                <span>Shards that own their own fate, a negotiable protocol, and deploys that drop nothing.</span>
+            </div>
+            <div class="case-body js-reveal">
+                <p>
+                    Relay is a sharded gateway in front of a thin routing layer. Nothing global
+                    survives: each shard has its own event loop, its own connection table and its
+                    own backpressure, so no consumer can stall the fleet.
+                </p>
+                <ul class="case-list">
+                    <li><b>Sharded gateway</b> — connections partitioned across independent
+                        shards; a slow consumer only ever penalises its own shard.</li>
+                    <li><b>Versioned wire protocol</b> — handshake negotiates a version, so old
+                        frames keep parsing exactly as before while new frames add batching and
+                        resume tokens.</li>
+                    <li><b>Sticky session routing</b> — a reconnect lands on the shard that
+                        already holds that session's state, instead of starting cold.</li>
+                    <li><b>Adaptive heartbeat + idle eviction</b> — keeps the connection table
+                        honest behind load balancers that hold dead sockets open.</li>
+                    <li><b>Graceful drain</b> — a shard hands its connections off during a
+                        deploy with no dropped frames, which is what makes rolling restarts
+                        possible at all.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── 03 The hard part ── -->
+    <section class="case-section">
+        <div class="container case-grid">
+            <div class="case-label js-reveal">03 — The hard part
+                <span>Backpressure, protocol evolution without a flag day, and measuring the right number.</span>
+            </div>
+            <div class="case-body js-reveal">
+                <h3>Backpressure before memory</h3>
+                <p>
+                    Each connection gets a bounded send queue. When one is full the shard stops
+                    pulling for that consumer and applies a <strong>documented drop policy</strong>
+                    rather than growing until the box dies. Dropped messages carry resume tokens,
+                    so a slow client resumes and refetches instead of silently losing events —
+                    recoverable is a much better failure mode than lost.
+                </p>
+
+                <h3>Evolving the protocol without a flag day</h3>
+                <p>
+                    Everything new is opt-in at the handshake: existing clients take the old path
+                    untouched, upgraded clients negotiate batching. The cost of "zero breaking
+                    changes" is that <strong>you have to keep the old path working</strong> — so
+                    it was written as a first-class, tested path, not a compatibility shim, and
+                    retired by usage data rather than by a deadline.
+                </p>
+
+                <h3>The number worth measuring</h3>
+                <p>
+                    Throughput was the wrong metric: a gateway can push millions of messages a
+                    second while feeling broken. We measured <strong>p99 delivery time</strong>
+                    instead, because that is what a customer's UI actually shows. It also turned
+                    out to be the metric that caught the file-descriptor ceiling before users did.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── 04 Outcome ── -->
+    <section class="case-section case-outcome">
+        <div class="container case-grid">
+            <div class="case-label js-reveal">04 — Outcome
+                <span>Two hundred to forty thousand, with no integration noticing.</span>
+            </div>
+            <div class="case-body js-reveal">
+                <div class="work-stats">
+                    <div class="work-stat-box">
+                        <div class="work-stat-value">40k</div>
+                        <div class="work-stat-sub">Concurrent sockets</div>
+                    </div>
+                    <div class="work-stat-box">
+                        <div class="work-stat-value">11ms</div>
+                        <div class="work-stat-sub">p99 delivery</div>
+                    </div>
+                    <div class="work-stat-box">
+                        <div class="work-stat-value">0</div>
+                        <div class="work-stat-sub">Breaking changes</div>
+                    </div>
+                </div>
+
+                <p>
+                    Relay carries <strong>40,000 concurrent connections</strong> at 11ms p99
+                    delivery, on hardware that would not have survived the original design. The
+                    sharding split was a two-week change; the drain protocol and the send-queue
+                    caps were what made it safe to ship.
+                </p>
+                <p>
+                    The result that mattered commercially: <strong>zero breaking changes</strong>.
+                    All fourteen original integrations are still live, none of them ever had to
+                    upgrade, and the ones that have upgraded did it for the batching rather than
+                    because we made them.
+                </p>
+
+                <ul class="case-tags">
+                    <li>Go</li><li>TypeScript</li><li>PostgreSQL</li>
+                    <li>Kubernetes</li><li>CI/CD</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Adjacent case studies ── -->
+    <nav class="case-next">
+        <div class="container case-grid">
+            <a class="js-reveal" href="atlas.html">
+                <div class="dir">← Previous case study</div>
+                <div class="name">Atlas — observability console</div>
+            </a>
+            <a class="js-reveal" href="ledger.html">
+                <div class="dir">Next case study →</div>
+                <div class="name">Ledger — reconciliation engine</div>
+            </a>
+        </div>
+    </nav>
+
+    <!-- ── CTA ── -->
+    <section class="cta-band" id="contact">
+        <div class="container">
+            <h2 class="cta-title js-reveal">Got a problem worth <b>solving properly?</b></h2>
+            <p class="cta-text js-reveal">Send the brief, the rough version, or one paragraph. All three are fine.</p>
+            <div class="js-reveal" style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+                <a href="mailto:hello@example.com" class="btn btn--solid" data-contact="email" data-contact-label>hello@example.com</a>
+                <a href="../index.html#work" class="btn">Browse the work</a>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════════════════════════════ -->
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-bottom">
+            <span>© 2026 Aria Novak. Built from scratch.</span>
+            <div style="display:flex;gap:18px;flex-wrap:wrap">
+                <a href="../index.html#work" class="footer-link">All work</a>
+                <a href="#" class="footer-link" data-contact="github">GitHub</a>
+                <a href="#" class="footer-link" data-contact="linkedin">LinkedIn</a>
+                <a href="mailto:hello@example.com" class="footer-link" data-contact="email">Email</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="../js/site-config.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/motion3d.js"></script>
+</body>
+</html>

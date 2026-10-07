@@ -5,18 +5,41 @@ and hover behaviour of the reference design.
 
 ```
 portfolio-sw/
-├── index.html      # markup
-├── css/style.css   # design tokens + all components
-└── js/
-    ├── data.js     # team data (edit this)
-    └── main.js     # all behaviour
+├── index.html         # markup
+├── work/              # case studies
+│   ├── ledger.html
+│   ├── atlas.html
+│   └── relay.html
+├── css/
+│   ├── style.css      # design tokens + all components
+│   ├── case.css       # only what work/*.html needs on top of style.css
+│   └── fonts.css      # @font-face for the self-hosted Poppins
+├── js/
+│   ├── data.js        # team data (edit this)
+│   ├── site-config.js # email + social URLs (edit this)
+│   ├── main.js        # all behaviour
+│   ├── motion3d.js    # 3D layer — progressive enhancement
+│   └── vendor/        # three.module.min.js, imported only on desktop
+├── fonts/             # Poppins 300–700, latin subset, 44K total
+├── images/            # headshots, talent portrait (WebP + PNG fallback)
+├── scripts/           # cutout.py / fade.py — reproducible image pipeline
+├── favicon.svg  favicon.ico  apple-touch-icon.png  og.png
+├── robots.txt  sitemap.xml
+└── README.md
 ```
 
-No build step, no dependencies. Open `index.html`, or:
+No build step, no dependencies, and **no external requests at runtime** —
+fonts, renderer and images are all served from this directory. Open
+`index.html`, or:
 
 ```bash
 python3 -m http.server 8000
 ```
+
+Prefer the server: Chrome blocks `file://` **ES module imports** (CORS), so
+double-clicking `index.html` loads the page fine but skips the WebGL hero —
+it marks itself `.no-webgl` and the canvas stays at its default 300×150.
+Serve it and you get the whole thing.
 
 ---
 
@@ -35,8 +58,12 @@ Defined at the top of `css/style.css`:
 | `--radius` | `4px` | cards, buttons |
 | `--ease` | `cubic-bezier(.4,0,.2,1)` | default easing |
 
-Type is Poppins (300/400/500/600/700). Weights are deliberately light —
-`300` for body, `400` for UI, `600/700` for emphasis.
+Type is Poppins (300/400/500/600/700), **self-hosted** from `fonts/` via
+`css/fonts.css` — latin subset only, with Google's `unicode-range` kept
+verbatim so `←` and `↻` fall back to a system font exactly as they did over
+the CDN. `poppins-400.woff2` is preloaded. Weights are deliberately light —
+`300` for body, `400` for UI, `600/700` for emphasis. `800` appears nowhere:
+it was never part of the font, so the browser was already selecting `700`.
 
 ---
 
@@ -115,7 +142,51 @@ clickable.
 - **Reveal** — `IntersectionObserver`, fade + 24px rise, staggered via inline
   `transition-delay`.
 
-All of it collapses under `prefers-reduced-motion: reduce`.
+All of it collapses under `prefers-reduced-motion: reduce` — including the two
+things JS drives directly (the rotating headline and the count-up stats), which
+check `matchMedia` before starting.
+
+---
+
+## Case studies
+
+`work/ledger.html`, `work/atlas.html`, `work/relay.html` are standalone pages
+built from the three work panels. They reuse `css/style.css` and add
+`css/case.css` for the hero, fact strip, quote band and prose layout. The header
+is the slim variant — logo, four links to `../index.html#…`, and the mailto
+button — so the mega menu markup isn't duplicated four times.
+
+**Panels are links.** `.work-content` became an `<a>`; because it is
+`position: absolute; inset: 0; display: flex`, swapping the tag changes nothing
+visually. It already had `pointer-events: none` until the panel is active, so on
+mobile you expand the accordion first and *then* tap through — while collapsed,
+the tap still belongs to the panel.
+
+**`--case-accent` must be a gradient, never a colour.** Each page sets it on
+`<main>` (not on the hero, or its sibling quote band won't inherit it) and it
+feeds `.case-rule` and `.case-quote-band`'s `background-image`. A bare colour
+there invalidates the whole declaration and you silently get no band at all.
+
+> **The prose in these three pages is draft copy**, written from the panel
+> quotes and stats. Treat it as placeholder text to rewrite.
+
+---
+
+## No third-party origins
+
+Runtime requests: **0**.
+
+- **Fonts** — `fonts/` + `css/fonts.css`, replacing the Google Fonts link.
+- **Renderer** — `js/vendor/three.module.min.js`, loaded only where it can be
+  used: `js/motion3d.js` skips coarse pointers, viewports under 992px,
+  `Save-Data` and `prefers-reduced-motion`, then marks the document
+  `no-webgl`. Phones were previously downloading a 655K renderer to paint a
+  canvas that was `display: none`.
+- **Contact links** — `js/site-config.js` holds the email and the social URLs;
+  every `data-contact` element reads from it. The `mailto:` written in the
+  markup is the no-JS fallback. **One edit changes them everywhere.**
+- **Images** — team portraits and the talent cutout are local; WebP with a PNG
+  fallback for the portrait.
 
 ---
 
@@ -125,10 +196,11 @@ All of it collapses under `prefers-reduced-motion: reduce`.
 `experience`, `stack`, `tags[]`, `photo`. Add a group with `id`, `label`, `icon`,
 `members[]` and a new tab is generated automatically.
 
-**Photos** — `photo` currently points at a placeholder service. Both image
-layers use the same URL: the idle layer is desaturated with
-`filter: grayscale(100%)`. If you have genuine B&W and colour versions of each
-portrait, drop the filter and point the two layers at different files.
+**Photos** — `photo` points at a local WebP in `images/team/` (regenerate from
+the originals with `scripts/fade.py`). Both image layers use the same file: the
+idle layer is desaturated with `filter: grayscale(100%)`. If you have genuine
+B&W and colour versions of each portrait, drop the filter and point the two
+layers at different files.
 
 **Colours** — change `--accent` and the whole page follows.
 

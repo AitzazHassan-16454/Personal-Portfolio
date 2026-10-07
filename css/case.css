@@ -1,0 +1,264 @@
+/* =============================================================================
+   CASE STUDIES — work/<project>.html
+   Loaded after style.css and only carries what is unique to those pages;
+   everything else (container, headings, buttons, stats, cta-band, footer,
+   header) is reused from the main stylesheet.
+   ============================================================================= */
+
+/* Each page sets --case-accent on <main> from the panel gradient it belongs
+   to, so a case study reads as the same object as the panel that links to it.
+   The fallback must be a <gradient>, never a bare colour: --case-accent is
+   consumed by background-image, where a colour would invalidate the whole
+   declaration. */
+:root {
+    --case-accent: linear-gradient(140deg, var(--accent), #8a2a02);
+}
+
+/* ── Hero ───────────────────────────────────────────────────────────────── */
+.case-hero { padding: 64px 0 0; }
+
+.case-crumb {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 40px;
+    transition: color var(--dur) var(--ease);
+}
+.case-crumb:hover { color: var(--accent); }
+.case-crumb svg { width: 13px; height: 13px; }
+
+.case-kicker {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+}
+
+.case-title {
+    font-size: clamp(40px, 6.4vw, 78px);
+    font-weight: 300;
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    margin-bottom: 26px;
+}
+.case-title b { font-weight: 600; }
+
+.case-lede {
+    font-size: clamp(17px, 2vw, 22px);
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--muted);
+    max-width: 780px;
+}
+
+/* Full-width accent rule carrying the project's own gradient */
+.case-rule {
+    height: 3px;
+    margin: 48px 0 0;
+    background: var(--case-accent);
+}
+
+/* ── Fact strip ─────────────────────────────────────────────────────────── */
+.case-meta {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-top: 34px;
+}
+.case-meta > div { background: var(--bg); padding: 18px 22px; }
+.case-meta dt {
+    font-size: 11px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 7px;
+}
+.case-meta dd { font-size: 15px; font-weight: 500; color: var(--text); }
+
+/* ── Client quote band ──────────────────────────────────────────────────── */
+.case-quote-band {
+    margin-top: 80px;
+    padding: 74px 0;
+    background-image: linear-gradient(rgba(3, 3, 3, 0.30), rgba(3, 3, 3, 0.30)),
+                      var(--case-accent);
+}
+.case-quote-band > * { position: relative; }
+.case-quote {
+    font-size: clamp(21px, 2.7vw, 33px);
+    font-weight: 300;
+    line-height: 1.38;
+    letter-spacing: -0.015em;
+    color: #fff;
+    max-width: 940px;
+}
+.case-quote-author {
+    margin-top: 24px;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.80);
+}
+
+/* ── Body sections ──────────────────────────────────────────────────────── */
+.case-section {
+    padding: 84px 0;
+    border-top: 1px solid var(--line);
+}
+.case-section:first-of-type { border-top: 0; }
+
+.case-grid {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 56px;
+    align-items: start;
+}
+
+/* Sticky so the section label tracks you through long prose */
+.case-label {
+    position: sticky;
+    top: 116px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+.case-label span {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-top: 10px;
+    text-transform: none;
+    font-weight: 300;
+    line-height: 1.6;
+}
+
+.case-body { max-width: 740px; }
+.case-body p {
+    font-size: 17px;
+    line-height: 1.78;
+    color: var(--muted);
+    margin-bottom: 20px;
+}
+.case-body p:last-child { margin-bottom: 0; }
+.case-body strong { color: var(--text); font-weight: 500; }
+
+.case-body h3 {
+    font-size: 19px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin: 36px 0 14px;
+}
+.case-body h3:first-child { margin-top: 0; }
+
+/* Accent-square bullets, matching the logo mark's geometry */
+.case-list { margin: 8px 0 24px; }
+.case-list li {
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 15px;
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--muted);
+}
+.case-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 9px;
+    height: 9px;
+    background: var(--accent);
+    border-radius: 1px;
+}
+.case-list li b { color: var(--text); font-weight: 500; }
+
+/* ── Outcome + stack ────────────────────────────────────────────────────── */
+.case-outcome .work-stats { margin-bottom: 34px; }
+.case-outcome .work-stat-box { flex: 1 1 180px; }
+
+.case-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 34px;
+}
+.case-tags li {
+    font-size: 13px;
+    font-weight: 400;
+    padding: 7px 14px;
+    background: var(--bg-tag);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    color: var(--muted);
+}
+
+/* ── Next / previous ────────────────────────────────────────────────────── */
+.case-next {
+    padding: 70px 0;
+    border-top: 1px solid var(--line);
+}
+.case-next .case-grid { gap: 24px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.case-next a {
+    display: block;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 26px 28px;
+    transition: border-color var(--dur) var(--ease),
+                background var(--dur) var(--ease),
+                transform var(--dur) var(--ease);
+}
+.case-next a:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    transform: translateY(-3px);
+}
+.case-next .dir {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+}
+.case-next .name {
+    font-size: 21px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    color: var(--text);
+}
+.case-next a:hover .name { color: var(--accent); }
+.case-next .blank { border-style: dashed; pointer-events: none; opacity: 0.45; }
+
+/* ── Sub-page header/footer shims ───────────────────────────────────────── */
+.site-nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.site-header .btn { padding: 10px 22px; }
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 991px) {
+    .case-hero { padding-top: 44px; }
+    .case-grid { grid-template-columns: 1fr; gap: 22px; }
+    .case-label { position: static; }
+    .case-label span { margin-top: 6px; }
+    .case-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .case-quote-band { margin-top: 56px; padding: 54px 0; }
+    .case-section { padding: 58px 0; }
+    .case-next .case-grid { grid-template-columns: 1fr; }
+    .site-nav { display: none; }
+}
+
+@media (max-width: 560px) {
+    .case-meta { grid-template-columns: 1fr; }
+    .case-body p, .case-list li { font-size: 16px; }
+}
