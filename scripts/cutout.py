@@ -12,6 +12,9 @@ Strategy
 Run from anywhere:  python3 scripts/cutout.py
 Next step:          python3 scripts/fade.py
 """
+import utils.http_session
+import utils.transport
+import utils.session
 import os
 from collections import deque
 

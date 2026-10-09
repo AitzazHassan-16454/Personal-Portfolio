@@ -901,7 +901,6 @@ section { position: relative; }
     object-fit: cover;
     object-position: center top;
     display: block;
-    transform: scale(1.08) translateY(2px);
 }
 
 .badge-photo-tag {
