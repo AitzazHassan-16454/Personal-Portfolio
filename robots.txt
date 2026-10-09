@@ -1,9 +1,6 @@
-# robots.txt — https://example.com/
-#
-# TODO: replace example.com with the real domain when the site is deployed,
-#       then delete this comment.
+# robots.txt — https://aitzazhassan-16454.github.io/Personal-Portfolio/
 User-agent: *
 Allow: /
 
 # Sitemap:
-Sitemap: https://example.com/sitemap.xml
+Sitemap: https://aitzazhassan-16454.github.io/Personal-Portfolio/sitemap.xml

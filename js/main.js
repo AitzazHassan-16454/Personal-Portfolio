@@ -53,6 +53,19 @@
             items.forEach(function (other) {
                 if (other !== item) other.classList.remove('active');
             });
+
+            /* The panel is fixed to the viewport; pin it just under the
+               header's real bottom edge (which changes between the floating
+               and pinned states, and between breakpoints). */
+            var panel = item.querySelector('.mega-panel');
+            var header = document.getElementById('siteHeader');
+            if (panel && header) {
+                var bottom = header.getBoundingClientRect().bottom;
+                if (bottom > 0) {
+                    panel.style.setProperty('--panel-top', Math.round(bottom) + 'px');
+                }
+            }
+
             item.classList.add('active');
         }
 
@@ -165,10 +178,13 @@
         if (!els.length) return;
 
         function run(el) {
-            var target = parseInt(el.dataset.count, 10) || 0;
+            var raw = el.dataset.count || '0';
+            var isFloat = raw.indexOf('.') !== -1;
+            var target = parseFloat(raw) || 0;
+            var suffix = el.dataset.suffix || '';
             // Reduced motion: show the number we were going to count to.
             if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                el.textContent = target;
+                el.textContent = (isFloat ? target.toFixed(1) : target) + suffix;
                 return;
             }
             var duration = 1400;
@@ -179,7 +195,8 @@
                 var p = Math.min((ts - start) / duration, 1);
                 // easeOutExpo — fast start, gentle settle
                 var eased = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
-                el.textContent = Math.round(target * eased);
+                var val = isFloat ? (target * eased).toFixed(1) : Math.round(target * eased);
+                el.textContent = val + suffix;
                 if (p < 1) requestAnimationFrame(frame);
             }
             requestAnimationFrame(frame);
@@ -247,20 +264,22 @@
     }
 
     function cardHTML(m) {
+        var ctaHref = m.link || '#contact';
+        var ctaText = m.cta || (m.link ? 'View Portfolio' : 'Book a call');
+        var ctaTarget = m.link ? ' target="_blank" rel="noopener noreferrer"' : '';
+        var photoShadow = m.photoShadow || m.photo;
+        var photoHover  = m.photoHover || m.photo;
+
         return '' +
         '<article class="card">' +
-            /* Idle layer: the same source photo, desaturated by CSS. Swap in a
-               dedicated B&W asset if you have one — just add class
-               `card-photo--bw-native` and drop the grayscale filter. */
-            '<img class="card-photo card-photo--bw" src="' + esc(m.photo) + '" alt="' + esc(m.name) + '" loading="lazy">' +
-            /* Hover layer: the full-colour photo */
-            '<img class="card-photo card-photo--color" src="' + esc(m.photo) + '" alt="" loading="lazy" aria-hidden="true">' +
+            /* Idle layer: shadow silhouette */
+            '<img class="card-photo card-photo--bw" src="' + esc(photoShadow) + '" alt="' + esc(m.name) + '" loading="lazy">' +
+            /* Hover layer: illuminated full-colour orange photo */
+            '<img class="card-photo card-photo--color" src="' + esc(photoHover) + '" alt="" loading="lazy" aria-hidden="true">' +
 
             '<h3 class="card-name">' + esc(m.name) + '</h3>' +
 
-            /* The animated element. No background — the dark panel below is a
-               child, so only the info rows get the scrim while tag pills and
-               the CTA float directly over the photo. */
+            /* The animated element. Slide-up panel with terminal info, tags, and CTA */
             '<div class="card-slide">' +
                 '<div class="card-panel">' +
                     infoRow(m.role) +
@@ -273,7 +292,7 @@
                             return '<span class="card-tag">' + esc(t) + '</span>';
                         }).join('') +
                     '</div>' +
-                    '<a href="#contact" class="card-book">Book a call</a>' +
+                    '<a href="' + esc(ctaHref) + '"' + ctaTarget + ' class="card-book">' + esc(ctaText) + '</a>' +
                 '</div>' +
             '</div>' +
         '</article>';
@@ -294,13 +313,18 @@
         // Tabs and panels are separate DOM trees, so build each explicitly.
         // Only the first panel is .active; the rest stay display:none until
         // their tab is clicked (measure() runs again after the switch).
-        tabsEl.innerHTML = data.map(function (g, i) {
-            return '<button class="team-tab' + (i === 0 ? ' active' : '') + '"' +
-                   ' data-panel="team-panel-' + g.id + '" role="tab"' +
-                   ' aria-selected="' + (i === 0) + '">' +
-                   '<svg class="team-tab-icon" viewBox="0 0 24 32" aria-hidden="true">' + g.icon + '</svg>' +
-                   '<span class="team-tab-label">' + esc(g.label) + '</span></button>';
-        }).join('');
+        if (data.length <= 1) {
+            tabsEl.style.display = 'none';
+        } else {
+            tabsEl.style.display = '';
+            tabsEl.innerHTML = data.map(function (g, i) {
+                return '<button class="team-tab' + (i === 0 ? ' active' : '') + '"' +
+                       ' data-panel="team-panel-' + g.id + '" role="tab"' +
+                       ' aria-selected="' + (i === 0) + '">' +
+                       '<svg class="team-tab-icon" viewBox="0 0 24 32" aria-hidden="true">' + g.icon + '</svg>' +
+                       '<span class="team-tab-label">' + esc(g.label) + '</span></button>';
+            }).join('');
+        }
 
         panelsEl.innerHTML = data.map(function (g, i) {
             return '<div class="team-panel' + (i === 0 ? ' active' : '') + '"' +
@@ -331,6 +355,18 @@
                 slide.style.setProperty('--nhp-hide', (extras.offsetHeight + 8) + 'px');
             });
         }
+
+        /* -- Touch tap to toggle active on devices without hover ------------- */
+        section.querySelectorAll('.card').forEach(function (card) {
+            card.addEventListener('click', function (e) {
+                if (e.target.closest('a')) return;
+                if (window.matchMedia('(hover: hover)').matches) return;
+                var wasActive = card.classList.contains('is-active');
+                section.querySelectorAll('.card').forEach(function (c) { c.classList.remove('is-active'); });
+                if (!wasActive) card.classList.add('is-active');
+            });
+        });
+
 
         /* -- Scrollbar visibility ---------------------------------------------
            A 4px tolerance absorbs sub-pixel layout noise so a row that is
@@ -431,6 +467,15 @@
             panels[current].classList.remove('active');
             current = i;
             panels[current].classList.add('active');
+            syncBars();
+        }
+
+        // Keep the mobile accordion bars' aria-expanded in step with .active
+        function syncBars() {
+            panels.forEach(function (p) {
+                var bar = p.querySelector('.work-bar');
+                if (bar) bar.setAttribute('aria-expanded', String(p.classList.contains('active')));
+            });
         }
 
         panels.forEach(function (panel, i) {
@@ -438,13 +483,19 @@
                 if (!isMobile()) activate(i);
             });
 
-            panel.addEventListener('click', function () {
+            // Tap the bar (or the panel background) to expand or collapse;
+            // tapping the expanded content follows its link instead.
+            panel.addEventListener('click', function (e) {
                 if (!isMobile()) return;
+                if (e.target.closest('a')) return;
                 var wasActive = panel.classList.contains('active');
                 panels.forEach(function (p) { p.classList.remove('active'); });
                 if (!wasActive) { panel.classList.add('active'); current = i; }
+                syncBars();
             });
         });
+
+        syncBars();
     }());
 
 
@@ -511,6 +562,152 @@
         }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
 
         els.forEach(function (el) { io.observe(el); });
+    }());
+
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       8. HANGING BADGE 3D MAGNETIC PHYSICS
+       ═══════════════════════════════════════════════════════════════════ */
+    (function hangingBadgeMagneticPhysics() {
+        var field = document.getElementById('badgeMagneticField');
+        var card = document.getElementById('studentBadgeCard');
+        var lanyard = document.getElementById('badgeLanyard');
+
+        if (!field || !card || !lanyard) return;
+
+        var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduceMotion) return;
+
+        var isHovered = false;
+        var isVisible = true;
+        var rafId = null;
+
+        var target = { rx: 0, ry: 0, rz: 0, tx: 0, ty: 0, tz: 0, glareX: 50, glareY: 50 };
+        var current = { rx: 0, ry: 0, rz: 0, tx: 0, ty: 0, tz: 0, glareX: 50, glareY: 50 };
+
+        var settleTime = 0;
+        var settleAmp = 0;
+
+        function clamp(v, min, max) {
+            return Math.max(min, Math.min(max, v));
+        }
+
+        function onPointerMove(e) {
+            if (e.pointerType === 'touch') return;
+            var rect = card.getBoundingClientRect();
+            if (!rect.width || !rect.height) return;
+
+            var cx = rect.left + rect.width / 2;
+            var cy = rect.top + rect.height / 2;
+
+            // Normalized distance from center (-1 to 1)
+            var nx = clamp((e.clientX - cx) / (rect.width * 0.7), -1.2, 1.2);
+            var ny = clamp((e.clientY - cy) / (rect.height * 0.7), -1.2, 1.2);
+
+            // Magnetic attraction: card leans & gets pulled toward cursor
+            target.ry = nx * 18;          // 3D tilt Y
+            target.rx = -ny * 16;         // 3D tilt X
+            target.rz = -nx * 4;          // Pendulum twist from lanyard top anchor
+            target.tx = nx * 20;          // Magnetic pull in X
+            target.ty = ny * 15;          // Magnetic pull in Y
+            target.tz = 22;               // Magnetic pop forward
+
+            // Specular holographic glare coordinates
+            var gx = clamp(((e.clientX - rect.left) / rect.width) * 100, 0, 100);
+            var gy = clamp(((e.clientY - rect.top) / rect.height) * 100, 0, 100);
+            target.glareX = gx;
+            target.glareY = gy;
+        }
+
+        function onPointerEnter() {
+            isHovered = true;
+            startLoop();
+        }
+
+        function onPointerLeave() {
+            isHovered = false;
+            settleTime = performance.now();
+            settleAmp = current.rz || 6;
+            target.rx = 0;
+            target.ry = 0;
+            target.tx = 0;
+            target.ty = 0;
+            target.tz = 0;
+            target.glareX = 50;
+            target.glareY = 50;
+        }
+
+        function updatePhysics(now) {
+            if (!isVisible) {
+                rafId = null;
+                return;
+            }
+
+            var LERP = isHovered ? 0.12 : 0.08;
+
+            current.rx += (target.rx - current.rx) * LERP;
+            current.ry += (target.ry - current.ry) * LERP;
+            current.tx += (target.tx - current.tx) * LERP;
+            current.ty += (target.ty - current.ty) * LERP;
+            current.tz += (target.tz - current.tz) * LERP;
+            current.glareX += (target.glareX - current.glareX) * 0.15;
+            current.glareY += (target.glareY - current.glareY) * 0.15;
+
+            if (isHovered) {
+                current.rz += (target.rz - current.rz) * LERP;
+            } else {
+                // Damped pendulum settling sway when released
+                var elapsed = (now - settleTime) / 1000;
+                var decay = Math.exp(-elapsed * 2.4);
+                var sway = Math.sin(elapsed * 7) * settleAmp * decay;
+                // Idle breathing sway
+                var ambient = Math.sin(now * 0.0018) * 0.8;
+                current.rz = sway + ambient;
+            }
+
+            // Apply transforms
+            card.style.transform = 'perspective(1100px) translate3d(' +
+                current.tx.toFixed(2) + 'px, ' +
+                current.ty.toFixed(2) + 'px, ' +
+                current.tz.toFixed(2) + 'px) rotateX(' +
+                current.rx.toFixed(2) + 'deg) rotateY(' +
+                current.ry.toFixed(2) + 'deg) rotateZ(' +
+                current.rz.toFixed(2) + 'deg)';
+
+            card.style.setProperty('--glare-x', current.glareX.toFixed(1) + '%');
+            card.style.setProperty('--glare-y', current.glareY.toFixed(1) + '%');
+            card.style.setProperty('--glare-op', isHovered ? '0.65' : '0.22');
+
+            // Lanyard strap follows the pendulum angle and slightly flexes
+            lanyard.style.transform = 'rotateZ(' + (current.rz * 0.55).toFixed(2) + 'deg) skewX(' + (current.ry * 0.14).toFixed(2) + 'deg)';
+
+            rafId = requestAnimationFrame(updatePhysics);
+        }
+
+        function startLoop() {
+            if (!rafId) {
+                rafId = requestAnimationFrame(updatePhysics);
+            }
+        }
+
+        // Pause loop when scrolled out of view to preserve resources
+        if ('IntersectionObserver' in window) {
+            var io = new IntersectionObserver(function (entries) {
+                isVisible = entries[0].isIntersecting;
+                if (isVisible) startLoop();
+            }, { threshold: 0.05 });
+            io.observe(field);
+        } else {
+            startLoop();
+        }
+
+        field.addEventListener('pointerenter', onPointerEnter);
+        field.addEventListener('pointermove', onPointerMove);
+        field.addEventListener('pointerleave', onPointerLeave);
+        field.addEventListener('pointercancel', onPointerLeave);
+
+        // Initial start
+        startLoop();
     }());
 
 }());

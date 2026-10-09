@@ -15,8 +15,9 @@
 
 window.SITE_CONFIG = {
     contact: {
-        email:    'hello@example.com',
-        github:   '#',
+        email:    'aitzazhassan16454@gmail.com',
+        phone:    'tel:+923428879040',
+        github:   'https://github.com/aitzazhassan',
         linkedin: '#',
         x:        '#',
         writing:  '#'

@@ -21,6 +21,7 @@
     --line-strong:   #4A4A4A;
 
     --container:     1180px;
+    --gutter:        20px;
     --radius:        4px;
     --radius-sm:     3px;
 
@@ -64,7 +65,7 @@ ul { list-style: none; }
     width: 100%;
     max-width: var(--container);
     margin-inline: auto;
-    padding-inline: 20px;
+    padding-inline: var(--gutter);
 }
 
 section { position: relative; }
@@ -92,7 +93,15 @@ section { position: relative; }
     opacity: 0.85;
 }
 
-.section-pad { padding: 100px 0; }
+/* Breakpoint visibility helpers — copy that names the right affordance
+   (tap vs hover) for the device you're on */
+.hide-sm { display: none; }
+@media (min-width: 992px) {
+    .hide-sm { display: inline; }
+    .hide-lg { display: none; }
+}
+
+.section-pad { padding: 64px 0 48px; }
 
 /* ── Buttons ────────────────────────────────────────────────────────────── */
 .btn {
@@ -107,7 +116,7 @@ section { position: relative; }
     font-size: 14px;
     font-weight: 500;
     letter-spacing: 0.04em;
-    padding: 11px 30px;
+    padding: 10px 18px;
     transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
     white-space: nowrap;
 }
@@ -117,7 +126,7 @@ section { position: relative; }
 .btn--solid {
     background: var(--accent);
     color: #fff;
-    padding: 12px 40px;
+    padding: 11px 26px;
 }
 .btn--solid:hover { background: #fff; color: var(--accent); }
 
@@ -130,11 +139,11 @@ section { position: relative; }
    ============================================================================= */
 .site-header {
     position: sticky;
-    top: 40px;
+    top: 16px;
     z-index: 5000;
-    width: 98%;
-    margin: 40px auto 0;
-    padding: 14px 20px;
+    width: 96%;
+    margin: 16px auto 0;
+    padding: 12px 16px;
     background: rgba(22, 22, 29, 0.90);
     border-radius: var(--radius);
     transition: top 0.35s var(--ease), background 0.35s var(--ease);
@@ -154,13 +163,15 @@ section { position: relative; }
 /* Pinned state — once scrolled past, flush to the top edge */
 .site-header.is-pinned {
     top: 0;
+    width: 100%;
     border-bottom: 1px solid var(--line-strong);
     border-radius: 0;
 }
 
 /* The mega panel is fixed to the viewport, so it needs its own offset when
-   the header pins — otherwise a ~50px gap opens between the two surfaces. */
-.site-header.is-pinned .mega-panel { top: 86px; }
+   the header pins — otherwise a ~50px gap opens between the two surfaces.
+   JS measures the header's real bottom edge on open and publishes it as
+   --panel-top; the fallbacks only cover the pre-JS paint. */
 
 .header-inner {
     display: flex;
@@ -178,7 +189,10 @@ section { position: relative; }
     letter-spacing: -0.01em;
     color: #fff;
     flex-shrink: 0;
+    position: relative;
 }
+/* Invisible 44px-tall tap target (the logo box itself is only 26px) */
+.logo::after { content: ''; position: absolute; inset: -9px -6px; }
 .logo-mark {
     width: 26px;
     height: 26px;
@@ -191,8 +205,21 @@ section { position: relative; }
     color: #fff;
 }
 
-/* Nav */
-.nav { display: flex; align-items: center; gap: 4px; }
+/* Nav — desktop only; small screens use the drawer + hamburger */
+.nav { display: none; align-items: center; gap: 4px; }
+.nav-list { display: flex; align-items: center; gap: 4px; }
+
+/* Desktop header CTA — hidden on small screens, the drawer carries its own */
+.header-cta { display: none; gap: 10px; }
+
+/* The case-study header prints the full email as its own label; cap it so the
+   pill never outgrows a phone viewport (ellipsis kicks in instead). */
+.site-header .btn {
+    padding-inline: 14px;
+    max-width: 44vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .nav-item { position: relative; }
 
@@ -218,10 +245,11 @@ section { position: relative; }
 
 /* ── Mega panel: clip-path curtain drop from the top edge ────────────────── */
 .mega-panel {
+    display: none;
     position: fixed;
     left: 0;
     right: 0;
-    top: 130px;
+    top: var(--panel-top, 130px);
     width: 98%;
     margin-inline: auto;
     padding: 34px 34px 34px 0;
@@ -294,7 +322,7 @@ section { position: relative; }
 
 /* ── Mobile nav ─────────────────────────────────────────────────────────── */
 .nav-toggle {
-    display: none;
+    display: flex;
     flex-direction: column;
     gap: 5px;
     padding: 8px 6px;
@@ -361,7 +389,10 @@ section { position: relative; }
     place-items: center;
     padding: 4px;
     color: #fff;
+    position: relative;
 }
+/* Invisible 44px tap target around the 30px close button */
+.drawer-close::after { content: ''; position: absolute; inset: -7px; }
 
 .drawer-cta {
     display: flex;
@@ -408,7 +439,7 @@ section { position: relative; }
    HERO
    ============================================================================= */
 .hero {
-    padding: 90px 0 70px;
+    padding: 50px 0 40px;
     text-align: center;
 }
 
@@ -422,10 +453,11 @@ section { position: relative; }
     border-radius: 100px;
     background: var(--accent-soft);
     color: var(--accent);
-    font-size: 12px;
+    font-size: clamp(10.5px, 2.7vw, 12px);
     font-weight: 500;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
+    max-width: 100%;
 }
 .hero-eyebrow .dot {
     width: 6px;
@@ -433,6 +465,7 @@ section { position: relative; }
     border-radius: 50%;
     background: var(--accent);
     animation: pulse 2.4s var(--ease) infinite;
+    flex-shrink: 0;
 }
 
 @keyframes pulse {
@@ -441,41 +474,44 @@ section { position: relative; }
 }
 
 .hero-top {
-    font-size: clamp(30px, 5.2vw, 65px);
+    font-size: clamp(26px, 5.2vw, 65px);
     font-weight: 300;
-    line-height: 1.1;
+    line-height: 1.22;
     color: var(--text);
     margin-bottom: 8px;
 }
 .hero-top span {
     display: block;
-    font-size: clamp(19px, 3.1vw, 40px);
+    font-size: clamp(16px, 3.1vw, 40px);
     font-weight: 300;
-    margin-top: -6px;
+    margin-top: 6px;
+    line-height: 1.3;
 }
 
 /* Oversized stroked "outline" wordmark */
 .hero-outline {
-    font-size: clamp(74px, 15.5vw, 150px);
+    font-size: clamp(34px, 12.8vw, 150px);
     font-weight: 700;
     letter-spacing: -0.02em;
     line-height: 1;
     text-transform: uppercase;
     color: transparent;
-    -webkit-text-stroke: 3px var(--text);
+    -webkit-text-stroke: clamp(1.5px, 0.35vw, 3px) var(--text);
     text-shadow: 0 0 16px rgba(0, 0, 0, 0.75);
     margin: 6px 0 10px;
+    max-width: 100%;
 }
 
-/* Cross-fading headline slot — JS swaps .active every 3s */
-.swap-wrap { position: relative; height: 52px; }
+/* Cross-fading headline slot — JS swaps .active every 3s.
+   Two lines tall by default; the desktop one-liner is set from 992px up. */
+.swap-wrap { position: relative; height: 76px; }
 
 .swap-heading {
     position: absolute;
     inset: 0;
     font-size: clamp(20px, 2.7vw, 40px);
     font-weight: 300;
-    line-height: 48px;
+    line-height: 1.35;
     opacity: 0;
     transition: opacity 0.6s ease;
 }
@@ -493,17 +529,19 @@ section { position: relative; }
 
 .hero-actions {
     display: flex;
+    flex-direction: column;
     gap: 14px;
     justify-content: center;
     flex-wrap: wrap;
 }
+.hero-actions .btn { width: 100%; }
 
-/* Hero stat strip */
+/* Hero stat strip — 1-up on phones, wider grids from 560px up */
 .hero-stats {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 1fr;
     gap: 1px;
-    margin-top: 70px;
+    margin-top: 44px;
     background: var(--line);
     border: 1px solid var(--line);
     border-radius: var(--radius);
@@ -534,7 +572,7 @@ section { position: relative; }
    ============================================================================= */
 .talent-panel {
     position: relative;
-    padding: 100px 0 80px;
+    padding: 60px 0 40px;
     overflow: hidden;
 }
 
@@ -559,27 +597,494 @@ section { position: relative; }
 
 .talent-grid {
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 1fr;
     align-items: center;
-    gap: clamp(40px, 5vw, 68px);
+    gap: clamp(36px, 4.5vw, 68px);
 }
 
 .talent-media {
     position: relative;
     width: 100%;
-    max-width: 480px;
+    max-width: 440px;
+    margin-inline: auto;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.talent-image {
-    display: block;
+/* ── Real-Life Hanging Student ID Badge & Lanyard ── */
+.talent-media {
+    position: relative;
     width: 100%;
-    max-width: 480px;
-    height: auto;
-    object-fit: contain;
-    filter: drop-shadow(0 18px 34px rgba(0, 0, 0, 0.35));
+    max-width: 440px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    perspective: 1200px;
+}
+
+.hanging-badge-assembly {
+    position: relative;
+    width: 100%;
+    max-width: 410px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ── Lanyard Ribbon Strap ── */
+.badge-lanyard {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform-origin: top center;
+    will-change: transform;
+    pointer-events: none;
+}
+
+.lanyard-strap {
+    position: relative;
+    width: 38px;
+    height: 72px;
+    background: linear-gradient(90deg, #14151e 0%, #222533 50%, #14151e 100%);
+    border-left: 2px dashed rgba(255, 77, 4, 0.55);
+    border-right: 2px dashed rgba(255, 77, 4, 0.55);
+    border-radius: 4px 4px 0 0;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55), inset 0 0 8px rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.lanyard-strap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.04) 0px, rgba(255, 255, 255, 0.04) 2px, transparent 2px, transparent 4px);
+    pointer-events: none;
+}
+
+.lanyard-brand {
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: rgba(244, 248, 245, 0.68);
+    text-transform: uppercase;
+    white-space: nowrap;
+    user-select: none;
+}
+
+/* ── Metallic Hardware Clasp ── */
+.lanyard-hardware {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    margin-top: -1px;
+    z-index: 12;
+}
+
+.hardware-clamp {
+    width: 42px;
+    height: 9px;
+    background: linear-gradient(180deg, #d4d4d8 0%, #52525b 50%, #18181b 100%);
+    border-radius: 2px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.65);
+}
+
+.hardware-ring {
+    width: 18px;
+    height: 14px;
+    border: 3px solid #71717a;
+    border-radius: 50%;
+    margin: -3px 0;
+    background: radial-gradient(circle, transparent 45%, #27272a 100%);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.4);
+}
+
+.hardware-clasp {
+    width: 16px;
+    height: 28px;
+    background: linear-gradient(135deg, #f4f4f5 0%, #71717a 45%, #27272a 100%);
+    border-radius: 3px 3px 6px 6px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+    position: relative;
+    z-index: 15;
+    margin-bottom: -18px;
+}
+
+.hardware-clasp::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 3px;
+    width: 3px;
+    height: 14px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 2px;
+    filter: blur(0.5px);
+}
+
+/* ── Suspended Student ID Card Badge ── */
+.student-badge-card {
+    position: relative;
+    width: 100%;
+    background: linear-gradient(155deg, rgba(26, 28, 40, 0.94) 0%, rgba(13, 14, 21, 0.98) 100%);
+    border: 1px solid rgba(255, 77, 4, 0.38);
+    border-radius: 16px;
+    padding: 14px 16px 18px;
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.72),
+                0 0 50px rgba(255, 77, 4, 0.12),
+                inset 0 1px 1px rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    overflow: hidden;
+    transform-origin: top center;
+    will-change: transform;
+    transform-style: preserve-3d;
+    transition: box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+
+.student-badge-card:hover {
+    border-color: rgba(255, 77, 4, 0.65);
+    box-shadow: 0 32px 85px rgba(0, 0, 0, 0.8),
+                0 0 70px rgba(255, 77, 4, 0.22),
+                inset 0 1px 2px rgba(255, 255, 255, 0.32);
+}
+
+/* Punch Slot Hole (Clasp hooks through here) */
+.badge-punch-slot {
+    position: relative;
+    width: 38px;
+    height: 10px;
+    margin: 0 auto 12px;
+    background: #0b0c12;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 6px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.9), 0 1px 0 rgba(255, 255, 255, 0.18);
+    z-index: 4;
+}
+
+/* Specular Glare & Hologram Foil */
+.badge-glare {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 3;
+    background: radial-gradient(380px circle at var(--glare-x, 50%) var(--glare-y, 50%), rgba(255, 255, 255, 0.16) 0%, transparent 60%);
+    opacity: var(--glare-op, 0.25);
+    mix-blend-mode: overlay;
+    transition: opacity 0.3s ease;
+}
+
+.badge-holo-foil {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 2;
+    background: linear-gradient(135deg, transparent 20%, rgba(255, 77, 4, 0.12) 35%, rgba(34, 197, 94, 0.10) 50%, rgba(59, 130, 246, 0.12) 65%, transparent 80%);
+    opacity: var(--glare-op, 0.25);
+    mix-blend-mode: color-dodge;
+}
+
+.student-badge-card > *:not(.badge-glare):not(.badge-holo-foil) {
+    position: relative;
+    z-index: 4;
+}
+
+/* Badge Header */
+.badge-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.badge-institution {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.badge-emblem {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(255, 77, 4, 0.28), rgba(22, 22, 29, 0.95));
+    border: 1px solid rgba(255, 77, 4, 0.55);
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(255, 77, 4, 0.2);
+}
+
+.badge-inst-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #fff;
+    line-height: 1.1;
+    display: block;
+}
+
+.badge-inst-sub {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-top: 2px;
+    display: block;
+}
+
+.badge-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(39, 201, 63, 0.10);
+    border: 1px solid rgba(39, 201, 63, 0.35);
+    color: #34d399;
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.badge-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #27c93f;
+    box-shadow: 0 0 8px #27c93f;
+    animation: credPulse 1.8s infinite;
+}
+
+/* Badge Body: Photo + Identity */
+.badge-body {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.badge-photo-box {
+    position: relative;
+    width: 96px;
+    height: 114px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: linear-gradient(180deg, #252838 0%, #14151e 100%);
+    border: 1.5px solid rgba(255, 77, 4, 0.45);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+}
+
+.badge-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    transform: scale(1.08) translateY(2px);
+}
+
+.badge-photo-tag {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    font-size: 7.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #fff;
+    background: rgba(22, 22, 29, 0.88);
+    border: 1px solid rgba(255, 77, 4, 0.5);
+    padding: 2px 5px;
+    border-radius: 4px;
+    backdrop-filter: blur(4px);
+}
+
+.badge-identity {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.badge-kicker {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 3px;
+}
+
+.badge-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 2px;
+}
+
+.badge-role {
+    font-size: 11px;
+    color: var(--text);
+    font-weight: 400;
+    opacity: 0.9;
+    margin-bottom: 6px;
+}
+
+.badge-field-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.badge-field {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 9.5px;
+}
+
+.field-k {
+    color: var(--muted);
+    font-size: 8.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    min-width: 56px;
+}
+
+.field-v {
+    color: #fff;
+    font-weight: 500;
+    font-family: 'SF Mono', Consolas, monospace;
+    font-size: 9px;
+}
+
+/* Smartcard Contact Chip & Tech Stack Row */
+.badge-smart-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 8px 10px;
+    background: rgba(22, 23, 33, 0.7);
+    border: 1px solid rgba(244, 248, 245, 0.08);
+    border-radius: 10px;
+    margin-bottom: 14px;
+}
+
+.smart-chip-contact {
+    width: 28px;
+    height: 20px;
+    border-radius: 4px;
+    background: linear-gradient(135deg, #d4af37 0%, #aa771c 50%, #f5d77f 100%);
+    border: 1px solid #8c5d14;
+    position: relative;
+    flex-shrink: 0;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4), 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.chip-pattern {
+    position: absolute;
+    inset: 4px;
+    border: 1px solid #734808;
+    border-radius: 2px;
+    pointer-events: none;
+}
+
+.badge-specs-mini {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    flex: 1;
+    align-items: center;
+}
+
+.b-spec {
+    font-size: 8.5px;
+    padding: 2px 5px;
+    border-radius: 4px;
+    background: rgba(244, 248, 245, 0.06);
+    border: 1px solid rgba(244, 248, 245, 0.1);
+    color: rgba(244, 248, 245, 0.85);
+    white-space: nowrap;
+}
+
+.b-spec--accent {
+    background: rgba(255, 77, 4, 0.14);
+    border-color: rgba(255, 77, 4, 0.4);
+    color: #fff;
+    font-weight: 500;
+}
+
+.badge-nfc-symbol {
+    color: var(--accent);
+    opacity: 0.85;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+/* Badge Footer: Barcode & Security */
+.badge-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px solid rgba(244, 248, 245, 0.08);
+}
+
+.badge-barcode-block {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.barcode-lines {
+    width: 105px;
+    height: 16px;
+    background: repeating-linear-gradient(90deg, #fff 0px, #fff 2px, transparent 2px, transparent 3px, #fff 3px, #fff 5px, transparent 5px, transparent 8px, #fff 8px, #fff 9px, transparent 9px, transparent 11px, #fff 11px, #fff 14px, transparent 14px, transparent 16px);
+    opacity: 0.75;
+}
+
+.barcode-digits {
+    font-family: 'SF Mono', Consolas, monospace;
+    font-size: 8px;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+}
+
+.badge-auth-stamp {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: #34d399;
+    background: rgba(39, 201, 63, 0.08);
+    border: 1px solid rgba(39, 201, 63, 0.25);
+    padding: 3px 8px;
+    border-radius: 6px;
 }
 
 .talent-content {
@@ -590,7 +1095,7 @@ section { position: relative; }
 }
 
 .talent-eyebrow {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 400;
     color: var(--text);
     margin-bottom: 12px;
@@ -598,7 +1103,7 @@ section { position: relative; }
 }
 
 .talent-heading {
-    font-size: clamp(30px, 3.8vw, 42px);
+    font-size: clamp(26px, 3.8vw, 42px);
     font-weight: 300;
     line-height: 1.22;
     letter-spacing: -0.02em;
@@ -614,8 +1119,8 @@ section { position: relative; }
 .talent-body {
     display: flex;
     flex-direction: column;
-    gap: 18px;
-    font-size: clamp(14px, 1.05vw, 15px);
+    gap: 14px;
+    font-size: 14px;
     font-weight: 300;
     line-height: 1.75;
     color: var(--text);
@@ -661,7 +1166,7 @@ section { position: relative; }
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 0 34px;
+    padding: 0 22px;
     flex-shrink: 0;
     font-size: 19px;
     font-weight: 600;
@@ -681,28 +1186,31 @@ section { position: relative; }
 }
 
 /* =============================================================================
-   VALUE CARDS (3-up)
+   VALUE CARDS — 1-up on phones, 2-up from 600px, 3-up from 992px
    ============================================================================= */
 .value-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 26px;
-    margin-top: 56px;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-top: 40px;
 }
 
 .value-card {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 40px 28px;
     border: 1px solid var(--accent);
-    border-radius: var(--radius);
-    transition: background var(--dur) var(--ease), transform var(--dur-slow) var(--ease);
+    border-radius: 12px;
+    background: transparent;
+    min-height: 480px;
+    transition: background var(--dur) var(--ease), transform var(--dur-slow) var(--ease), box-shadow var(--dur-slow) var(--ease);
 }
 .value-card:hover {
     background: var(--accent-soft);
     transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
 }
 
 .value-icon {
@@ -710,10 +1218,11 @@ section { position: relative; }
     height: 56px;
     display: grid;
     place-items: center;
-    margin-bottom: 22px;
+    margin-bottom: 20px;
     border: 1px solid var(--accent-line);
     border-radius: 50%;
     color: var(--accent);
+    flex-shrink: 0;
     transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 .value-card:hover .value-icon { background: var(--accent); color: #fff; }
@@ -723,32 +1232,36 @@ section { position: relative; }
     font-weight: 300;
     color: var(--text);
     margin-bottom: 12px;
+    flex-shrink: 0;
 }
 .value-text {
     font-size: 14px;
     line-height: 1.6;
     color: var(--muted);
-    margin-bottom: 22px;
+    margin-bottom: 20px;
+    flex: 1;
 }
 .value-foot {
-    margin-top: auto;
-    padding: 8px 16px;
-    border-radius: var(--radius-sm);
+    display: inline-block;
+    padding: 8px 18px;
+    border-radius: 6px;
     background: var(--accent-soft);
     color: var(--accent);
     font-size: 13px;
     font-weight: 300;
     letter-spacing: 0.04em;
+    margin-top: 0;
+    flex-shrink: 0;
 }
 
 /* =============================================================================
-   SKILLS — icon crossfade on hover
+   SKILLS — icon crossfade on hover; 1-up on phones, 2-up from 560px, 4-up
    ============================================================================= */
 .skills-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 32px;
-    margin-top: 56px;
+    grid-template-columns: 1fr;
+    gap: 36px 20px;
+    margin-top: 40px;
 }
 
 .skill {
@@ -762,9 +1275,9 @@ section { position: relative; }
 /* Two stacked SVGs: normal hidden by default, hover shown on hover */
 .icon-wrap {
     position: relative;
-    width: 96px;
-    height: 96px;
-    margin-bottom: 22px;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 22px;
     flex-shrink: 0;
 }
 .icon-wrap svg {
@@ -779,16 +1292,23 @@ section { position: relative; }
 .skill:hover .icon-hover  { opacity: 1; transform: scale(1) rotate(0); }
 
 .skill-title {
-    font-size: 30px;
+    font-size: 24px;
     font-weight: 300;
     line-height: 1.1;
     color: var(--text);
     margin-bottom: 12px;
+    text-align: center;
     transition: color 0.3s ease;
 }
 .skill:hover .skill-title { color: var(--accent); }
 
-.skill-text { font-size: 14px; line-height: 1.55; max-width: 240px; color: var(--muted); }
+.skill-text {
+    font-size: 14px;
+    line-height: 1.55;
+    max-width: 240px;
+    margin: 0 auto;
+    color: var(--muted);
+}
 .skill-text b { display: block; font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
 
 /* =============================================================================
@@ -806,14 +1326,14 @@ section { position: relative; }
    --nhp-hide to its height + 8px, so the hidden panel is clipped exactly at
    the card's bottom edge regardless of how many tag pills wrap.
    ============================================================================= */
-.team { padding: 100px 0 70px; }
+.team { padding: 64px 0 48px; }
 
 /* ── Filter tabs ────────────────────────────────────────────────────────── */
 .team-tabs {
     display: flex;
     align-items: flex-end;
     gap: 0;
-    margin-top: 64px;
+    margin-top: 40px;
     border-bottom: 1px solid var(--line);
     overflow-x: auto;
     scrollbar-width: none;
@@ -825,7 +1345,7 @@ section { position: relative; }
     align-items: center;
     gap: 10px;
     padding: 0 0 12px;
-    margin-right: 48px;
+    margin-right: 28px;
     flex-shrink: 0;
     position: relative;
     bottom: -1px;
@@ -857,43 +1377,58 @@ section { position: relative; }
 .team-panel { display: none; }
 .team-panel.active { display: block; }
 
-/* Horizontal scroller. Also the drag surface (cursor: grab). */
+/* Horizontal scroller. Also the drag surface (cursor: grab).
+   Base: breaks out of the padded container to full viewport width (the row
+   is a phone-first swipe surface) and never shows a scrollbar. */
 .cards-scroll {
+    /* Full-bleed out of the padded container without viewport units: the
+       negative gutters mirror .container's padding-inline, so the scroller
+       lands exactly on both viewport edges. (width:100vw + 50vw math cannot
+       do this — viewport units include the classic scrollbar, which pushed
+       the document 8px wider than the window on desktop.) */
+    width: auto;
+    margin-inline: calc(-1 * var(--gutter));
     overflow-x: auto;
     scrollbar-width: none;
-    padding: 48px 0 24px;
+    padding: 32px 20px 24px;
     cursor: grab;
     -webkit-overflow-scrolling: touch;
 }
+.cards-scroll::-webkit-scrollbar { height: 0; }
 /* Nothing to drag when the row fits — don't advertise a grab hand */
 .cards-scroll:not(.can-scroll) { cursor: default; }
 .cards-scroll.is-dragging { cursor: grabbing; }
 .cards-scroll.is-dragging * { user-select: none; }
 
-/* Scrollbar only appears when the row actually overflows (JS sets .can-scroll) */
-.cards-scroll.can-scroll { scrollbar-width: thin; scrollbar-color: var(--accent) rgba(244, 248, 245, 0.1); }
-.cards-scroll.can-scroll::-webkit-scrollbar { height: 3px; }
-.cards-scroll:not(.can-scroll)::-webkit-scrollbar { display: none; }
-.cards-scroll.can-scroll::-webkit-scrollbar-track { background: rgba(244, 248, 245, 0.1); border-radius: 2px; }
-.cards-scroll.can-scroll::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
-
 .cards {
     display: flex;
-    gap: 18px;
+    gap: 24px;
     width: max-content;
 }
-
-/* ── Member card ────────────────────────────────────────────────────────── */
-.card {
-    position: relative;
-    width: 307px;
-    height: 472px;
-    flex-shrink: 0;
-    overflow: hidden;
-    border-radius: var(--radius);
+.cards-scroll:not(.can-scroll) .cards {
+    margin: 0 auto;
 }
 
-/* Full-bleed photo layers, stacked and crossfaded */
+/* ── Member card — compact by default, full size from 992px up ─────────── */
+.card {
+    position: relative;
+    width: 280px;
+    height: 430px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #0e0e12;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: transform var(--dur-slow) var(--ease), box-shadow var(--dur-slow) var(--ease);
+}
+.card:hover,
+.card.is-active {
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+}
+
+/* Full-bleed photo layers:
+   - .card-photo--bw is the rim-lit shadow silhouette (visible at idle)
+   - .card-photo--color is the bright orange illuminated portrait (visible on hover) */
 .card-photo {
     position: absolute;
     inset: 0;
@@ -901,92 +1436,118 @@ section { position: relative; }
     height: 100%;
     object-fit: cover;
     pointer-events: none;
-    border-radius: var(--radius);
+    border-radius: 12px;
     transition: opacity var(--dur-img) ease;
 }
-.card-photo--bw    { opacity: 1; z-index: 0; filter: grayscale(100%); }
+.card-photo--bw    { opacity: 1; z-index: 1; }
 .card-photo--color { opacity: 0; z-index: 1; }
 
-.card:hover .card-photo--bw    { opacity: 0; }
-.card:hover .card-photo--color { opacity: 1; }
+.card:hover .card-photo--bw,
+.card.is-active .card-photo--bw    { opacity: 0; }
+.card:hover .card-photo--color,
+.card.is-active .card-photo--color { opacity: 1; }
 
-/* Top vignette keeps the orange name legible over any photo */
+/* Subtle dark gradient overlay to ensure text legibility at idle */
 .card::before {
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: var(--radius);
-    background: linear-gradient(to bottom, rgba(22, 22, 29, 0.6) 0%, transparent 40%);
+    border-radius: 12px;
+    background: linear-gradient(to bottom, rgba(14, 14, 18, 0.4) 0%, transparent 22%, transparent 58%, rgba(14, 14, 18, 0.85) 100%);
     pointer-events: none;
     z-index: 2;
+    transition: opacity var(--dur-img) ease;
+}
+.card:hover::before,
+.card.is-active::before {
+    opacity: 0;
 }
 
 .card-name {
     position: absolute;
-    top: 16px;
-    left: 16px;
-    right: 16px;
+    top: 18px;
+    left: 18px;
+    right: 18px;
     z-index: 3;
-    font-size: 22px;
-    font-weight: 400;
+    font-size: 20px;
+    font-weight: 500;
     line-height: 28px;
     color: var(--accent);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    transition: color var(--dur) ease;
+    transition: color var(--dur-fast) ease;
 }
-.card:hover .card-name { color: var(--text); }
+.card:hover .card-name,
+.card.is-active .card-name {
+    color: #ffffff;
+}
 
-/* The element that actually animates. No background here — the dark panel
-   below is a child, so only the rows sit on the scrim while the tag pills
-   float directly over the photo. */
+/* Slide-up container for terminal rows, tag pills, and CTA */
 .card-slide {
     position: absolute;
-    bottom: 8px;
-    left: 8px;
-    right: 8px;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
     z-index: 3;
     display: flex;
     flex-direction: column;
 
     /* --nhp-hide is set by JS: extras height + 8px */
-    transform: translateY(var(--nhp-hide, 140px));
+    transform: translateY(var(--nhp-hide, 130px));
     transition: transform var(--dur-slow) var(--ease);
 }
-.card:hover .card-slide { transform: translateY(0); }
+.card:hover .card-slide,
+.card.is-active .card-slide {
+    transform: translateY(0);
+}
 
 .card-panel {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    padding: 14px 16px;
-    background: var(--bg-panel);
-    border-radius: 6px;
+    padding: 10px 14px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    transition: background var(--dur-slow) ease, border-color var(--dur-slow) ease, backdrop-filter var(--dur-slow) ease;
+}
+.card:hover .card-panel,
+.card.is-active .card-panel {
+    background: rgba(22, 22, 29, 0.88);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-color: rgba(255, 255, 255, 0.08);
 }
 
 .card-info-row {
     display: flex;
     align-items: center;
     gap: 10px;
-    height: 27px;
+    height: 26px;
     flex-shrink: 0;
 }
 
-.card-prompt { flex-shrink: 0; }
+.card-prompt {
+    flex-shrink: 0;
+}
 
 .card-info-text {
-    font-size: 14px;
+    font-size: 13.5px;
     font-weight: 300;
     line-height: 22px;
-    color: rgba(244, 248, 245, 0.9);
+    color: rgba(244, 248, 245, 0.92);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-/* Extras sit outside the dark panel — no scrim behind them */
-.card-extras { display: flex; flex-direction: column; padding-top: 8px; }
+/* Extras sit outside the dark panel */
+.card-extras {
+    display: flex;
+    flex-direction: column;
+    padding-top: 8px;
+}
 
 .card-tags {
     display: flex;
@@ -997,10 +1558,10 @@ section { position: relative; }
 .card-tag {
     font-size: 11px;
     font-weight: 500;
-    color: var(--text);
-    background: var(--bg-tag);
-    border: 1px solid rgba(244, 248, 245, 0.28);
-    border-radius: var(--radius-sm);
+    color: #ffffff;
+    background: rgba(22, 22, 29, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 4px;
     padding: 3px 9px;
     white-space: nowrap;
     transition: background var(--dur-fast) ease, border-color var(--dur-fast) ease, color var(--dur-fast) ease;
@@ -1013,16 +1574,21 @@ section { position: relative; }
 
 .card-book {
     display: block;
-    padding: 10px 0;
+    padding: 11px 0;
     background: var(--accent);
-    color: #fff;
+    color: #ffffff;
     font-size: 14px;
     font-weight: 500;
     text-align: center;
-    border-radius: var(--radius-sm);
-    transition: opacity var(--dur-fast) ease, background var(--dur-fast) ease;
+    border-radius: 6px;
+    box-shadow: 0 4px 14px rgba(255, 77, 4, 0.35);
+    transition: opacity var(--dur-fast) ease, background var(--dur-fast) ease, transform var(--dur-fast) ease;
 }
-.card-book:hover { opacity: 0.88; background: #ff6a2a; }
+.card-book:hover {
+    opacity: 0.95;
+    background: #ff6a2a;
+    transform: translateY(-1px);
+}
 
 /* Section footer CTA */
 .team-cta { text-align: center; margin-top: 52px; }
@@ -1038,33 +1604,55 @@ section { position: relative; }
 .team-cta-link:hover { opacity: 0.8; }
 
 /* =============================================================================
-   WORK — hover-expand flex-grow accordion panels
+   WORK — stacked tap-accordion by default; the hover-expand flex accordion
+   is restored from 992px up.
    ============================================================================= */
 .work-section {
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh - 60px);
-    min-height: 620px;
     overflow: hidden;
 }
 
 .work-panels {
-    flex: 1;
-    min-height: 0;
     display: flex;
+    flex-direction: column;
     position: relative;
-    margin-top: 46px;
+    margin-top: 34px;
 }
 
 .work-panel {
     position: relative;
-    flex: 0 0 180px;
     overflow: hidden;
-    transform: translateZ(0);
-    transition: flex-grow 0.75s var(--ease);
     cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
-.work-panel.active { flex-grow: 1; }
+
+/* Tap target + always-visible title for the stacked layout. The desktop
+   hover accordion hides it and puts the title inside the overlay instead. */
+.work-bar {
+    position: relative;
+    z-index: 4;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 20px;
+    text-align: left;
+    color: var(--text);
+}
+.work-bar-title {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+}
+.work-bar-chevron {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    color: var(--accent);
+    transition: transform 0.3s var(--ease);
+}
+.work-panel.active .work-bar-chevron { transform: rotate(180deg); }
 
 /* B&W backdrop visible; colour backdrop revealed on activation */
 .work-bg {
@@ -1089,54 +1677,39 @@ section { position: relative; }
     z-index: 2;
 }
 
-/* Content fades + rises in once expanded, with a delay so it reads as
-   following the width change rather than competing with it */
+/* Content: a max-height accordion on touch, the absolute overlay on desktop.
+   No fade delay here — the panel's own height animation carries the reveal. */
 .work-content {
-    position: absolute;
-    inset: 0;
+    position: relative;
     z-index: 3;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding: 50px;
-    min-width: 620px;
-    opacity: 0;
-    transform: translateY(10px);
-    pointer-events: none;
-    overflow: hidden;
-    transition: opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s;
-}
-.work-panel.active .work-content {
+    max-height: 0;
     opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
+    transform: none;
+    padding: 0;
+    overflow: hidden;
+    transition: max-height 0.45s ease, padding 0.35s ease;
 }
+.work-panel.active .work-content { max-height: 1600px; padding: 24px 20px; }
 /* .work-content is the panel's link — make it reachable by keyboard */
 .work-content:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: -6px;
 }
 
-/* "Next" arrow — appears on the active panel, nudges right on hover */
+/* "Next" arrow — desktop only (the tap accordion has no next affordance) */
 .work-arrow {
-    position: absolute;
-    top: 30px;
-    right: 30px;
-    width: 26px;
-    height: 26px;
-    z-index: 5;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s ease, transform 0.3s ease;
+    display: none;
 }
-.work-panel.active .work-arrow { opacity: 1; }
-.work-panel.active:hover .work-arrow { transform: translateX(6px); }
 
 .work-head {
-    display: flex;
+    /* The mobile bar carries the title; the overlay head is desktop-only */
+    display: none;
     align-items: center;
     gap: 14px;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 .work-pipe { font-size: 34px; font-weight: 300; line-height: 1; color: var(--accent); }
 .work-title {
@@ -1148,7 +1721,7 @@ section { position: relative; }
 }
 
 .work-quote {
-    font-size: 16px;
+    font-size: 14px;
     font-style: italic;
     font-weight: 400;
     line-height: 1.55;
@@ -1168,9 +1741,10 @@ section { position: relative; }
 
 .work-stat-box {
     background: rgba(22, 22, 29, 0.9);
-    padding: 20px 26px;
+    padding: 14px 16px;
     border-radius: var(--radius);
     text-align: center;
+    flex: 1 1 auto;
     transition: background var(--dur) var(--ease);
 }
 .work-stat-box:hover { background: var(--accent); }
@@ -1178,23 +1752,23 @@ section { position: relative; }
 .work-stat-box:hover .work-stat-sub { color: #fff; }
 
 .work-stat-value {
-    font-size: 34px;
+    font-size: 24px;
     font-weight: 600;
     line-height: 1.2;
     color: var(--accent);
     white-space: nowrap;
     transition: color var(--dur) var(--ease);
 }
-.work-stat-sub { font-size: 13px; font-weight: 300; color: var(--accent); transition: color var(--dur) var(--ease); }
+.work-stat-sub { font-size: 11px; font-weight: 300; color: var(--accent); white-space: normal; transition: color var(--dur) var(--ease); }
 
 /* =============================================================================
-   PROCESS — vertical steps with a scroll-driven connector
+   PROCESS — one step per row on phones, 2-up from 600px, 4-up from 992px
    ============================================================================= */
 .process-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 1fr;
     gap: 1px;
-    margin-top: 56px;
+    margin-top: 40px;
     background: var(--line);
     border: 1px solid var(--line);
     border-radius: var(--radius);
@@ -1305,7 +1879,7 @@ section { position: relative; }
    ============================================================================= */
 .cta-band {
     position: relative;
-    padding: 100px 0;
+    padding: 64px 0;
     text-align: center;
     overflow: hidden;
     border-top: 1px solid var(--line);
@@ -1336,12 +1910,12 @@ section { position: relative; }
 .site-footer {
     background: var(--bg-deep);
     border-top: 1px solid #222;
-    padding: 60px 0 30px;
+    padding: 48px 0 26px;
 }
 .footer-grid {
     display: grid;
-    grid-template-columns: 1.6fr repeat(3, 1fr);
-    gap: 40px;
+    grid-template-columns: 1fr;
+    gap: 32px;
     padding-bottom: 40px;
     border-bottom: 1px solid #222;
 }
@@ -1366,8 +1940,8 @@ section { position: relative; }
 
 .footer-bottom {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 16px;
     flex-wrap: wrap;
     padding-top: 26px;
@@ -1388,102 +1962,211 @@ section { position: relative; }
 .social-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateY(-3px); }
 
 /* =============================================================================
-   RESPONSIVE
+   RESPONSIVE — mobile-first enhancement tiers
+   -----------------------------------------------------------------------------
+   The rules above target the narrowest screens (≈320px). Each block below
+   restores a layer of layout as the viewport can carry it:
+     480px  hero buttons side by side
+     560px  2-up stats/skills/footer, full-size ID badge
+     600px  2-up value cards and process steps
+     768px  wider gutters, roomier section rhythm, full-size controls
+     992px  the full desktop composition — multi-column grids, mega panel,
+            hover interactions, viewport-height work accordion
    ============================================================================= */
-@media (max-width: 1024px) {
-    .work-content { min-width: 0; }
+
+@media (max-width: 380px) {
+    :root { --gutter: 14px; }
+    .hero-stat { padding: 18px 12px; }
+    .student-badge-card { padding: 12px 12px 16px; border-radius: 14px; }
+    .badge-body { grid-template-columns: 84px 1fr; gap: 10px; }
+    .badge-photo-box { width: 84px; height: 102px; }
+    .badge-name { font-size: 16px; }
+    .badge-role { font-size: 10px; }
+    .badge-field { font-size: 9px; }
+    .field-k { min-width: 50px; font-size: 8px; }
+    .field-v { font-size: 8.5px; }
+    .barcode-lines { width: 88px; height: 14px; }
+    .badge-smart-strip { padding: 6px 8px; }
+    .b-spec { font-size: 8px; padding: 2px 4px; }
 }
 
-@media (max-width: 991px) {
-    .site-header { top: 20px; margin-top: 20px; width: 94%; padding: 12px 16px; }
-    .site-header.is-pinned { top: 0; width: 100%; border-radius: 0; }
+@media (min-width: 480px) {
+    .hero-actions { flex-direction: row; }
+    .hero-actions .btn { width: auto; }
+}
 
-    .nav, .header-cta { display: none; }
-    .nav-toggle { display: flex; }
+@media (min-width: 560px) {
+    .hero-stats { grid-template-columns: repeat(2, 1fr); }
+    .skills-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
 
-    .section-pad, .team { padding: 70px 0 50px; }
+    /* ID badge returns to full size */
+    .student-badge-card { padding: 16px 24px 22px; border-radius: 18px; }
+    .badge-body { grid-template-columns: 118px 1fr; gap: 16px; margin-bottom: 16px; }
+    .badge-photo-box { width: 118px; height: 138px; }
+    .badge-name { font-size: 21px; }
+    .badge-role { font-size: 12px; margin-bottom: 10px; }
+    .badge-field { font-size: 10.5px; }
+    .field-k { min-width: 68px; font-size: 9px; }
+    .field-v { font-size: 10px; }
+    .badge-smart-strip { padding: 10px 12px; gap: 10px; margin-bottom: 16px; }
+    .smart-chip-contact { width: 32px; height: 24px; }
+    .b-spec { font-size: 9.5px; padding: 2px 7px; }
+    .barcode-lines { width: 140px; height: 18px; }
+}
 
-    .talent-panel { padding: 60px 0 40px; }
-    .talent-grid { grid-template-columns: 1fr; gap: 36px; }
-    .talent-media { max-width: 380px; margin: 0 auto; }
-    .talent-image { max-width: 380px; height: auto; }
-    .talent-eyebrow { font-size: 16px; }
+@media (min-width: 600px) {
+    .value-grid { grid-template-columns: repeat(2, 1fr); }
+    .process-grid { grid-template-columns: repeat(2, 1fr); }
+}
 
-    .hero { padding: 50px 0 40px; }
-    .hero-stats { grid-template-columns: repeat(2, 1fr); margin-top: 50px; }
-    .swap-wrap { height: 76px; }
-    .swap-heading { line-height: 1.35; }
+@media (min-width: 768px) {
+    :root { --gutter: 28px; }
 
-    .value-grid { grid-template-columns: 1fr; gap: 18px; margin-top: 40px; }
-    .value-card { padding: 28px 22px; }
+    .section-pad { padding: 88px 0 64px; }
+    .hero { padding: 70px 0 56px; }
+    .talent-panel { padding: 80px 0 60px; }
+    .team { padding: 88px 0 64px; }
+    .cta-band { padding: 88px 0; }
+    .site-footer { padding: 56px 0 28px; }
 
-    .skills-grid { grid-template-columns: repeat(2, 1fr); gap: 36px 20px; }
-    .skill-title { font-size: 24px; }
+    .hero-stats { margin-top: 56px; }
+    .value-grid { margin-top: 48px; }
+    .skills-grid { margin-top: 48px; gap: 40px 28px; }
+    .process-grid { margin-top: 48px; }
+    .team-tabs { margin-top: 52px; }
 
-    /* --- TEAM: hover reveals become always-on, since touch has no hover --- */
-    .team-tabs { margin-top: 40px; }
-    .team-tab { margin-right: 28px; }
+    .btn { padding: 11px 30px; }
+    .btn--solid { padding: 12px 40px; }
+    /* Let the case-study header print its full email label again */
+    .site-header .btn { padding-inline: 30px; max-width: none; }
 
-    /* Break the scroller out of the padded container to full viewport width */
-    .cards-scroll {
-        width: 100vw;
-        margin-left: calc(50% - 50vw);
-        padding: 32px 20px 24px;
+    .marquee-item { padding: 0 34px; }
+    .icon-wrap { width: 96px; height: 96px; }
+
+    .footer-bottom {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
     }
-    .cards-scroll.can-scroll { scrollbar-width: none; }
-    .cards-scroll.can-scroll::-webkit-scrollbar { height: 0; }
 
-    .card { width: 260px; height: 400px; }
+    .work-panel.active .work-content { padding: 32px 26px; }
+    .work-title { font-size: 28px; }
+}
 
-    .card-name { font-size: 18px; color: var(--text); }
-    .card-slide { transform: translateY(0) !important; }
-    .card-panel { padding: 12px 14px; }
+@media (min-width: 992px) {
+    :root { --gutter: 32px; }
 
-    /* Touch has no :hover, so the photo crossfade and the slide-up can never
-       fire. Commit both to their end states so the cards are fully readable
-       without interaction. */
-    .card-photo--bw    { opacity: 0; }
-    .card-photo--color { opacity: 1; }
+    /* Header: wide floating pill with the desktop nav, CTA and mega panel */
+    .site-header { top: 40px; margin: 40px auto 0; width: 98%; padding: 14px 20px; }
+    .nav { display: flex; }
+    .nav-toggle { display: none; }
+    .header-cta { display: flex; }
+    .mega-panel { display: block; }
 
-    .work-section { height: auto; }
-    .work-panels { flex-direction: column; margin-top: 34px; }
-    .work-panel { flex: none !important; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
-    .work-panel:hover { flex: none !important; }
-    .work-arrow { display: none; }
+    .section-pad { padding: 100px 0; }
+    .hero { padding: 90px 0 70px; }
+    .talent-panel { padding: 100px 0 80px; }
+    .team { padding: 100px 0 70px; }
+    .cta-band { padding: 100px 0; }
+    .site-footer { padding: 60px 0 30px; }
+
+    .swap-wrap { height: 52px; }
+    .swap-heading { line-height: 48px; }
+
+    .hero-stats { grid-template-columns: repeat(4, 1fr); margin-top: 70px; }
+
+    .talent-grid { grid-template-columns: minmax(0, 440px) 1fr; }
+    .talent-eyebrow { font-size: 18px; }
+    .talent-body { gap: 18px; font-size: clamp(14px, 1.05vw, 15px); }
+
+    .value-grid { grid-template-columns: repeat(3, 1fr); gap: 26px; margin-top: 56px; }
+    .value-card { min-height: 500px; }
+
+    .skills-grid { grid-template-columns: repeat(4, 1fr); gap: 32px; margin-top: 56px; }
+    .skill-title { font-size: 30px; }
+
+    .team-tabs { margin-top: 64px; }
+    .team-tab { margin-right: 48px; }
+
+    /* Cards: in-container scroller with a visible overflow hint, full-size
+       cards, hover-driven crossfade + slide-up */
+    .cards-scroll { width: auto; margin-inline: 0; padding: 48px 0 24px; }
+    .cards-scroll.can-scroll { scrollbar-width: thin; scrollbar-color: var(--accent) rgba(244, 248, 245, 0.1); }
+    .cards-scroll.can-scroll::-webkit-scrollbar { height: 3px; }
+    .cards-scroll.can-scroll::-webkit-scrollbar-track { background: rgba(244, 248, 245, 0.1); border-radius: 2px; }
+    .cards-scroll.can-scroll::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+    .cards-scroll:not(.can-scroll)::-webkit-scrollbar { display: none; }
+
+    .card { width: 307px; height: 472px; }
+    .card-name { font-size: 22px; }
+    .card-panel { padding: 12px 16px; }
+    .card-info-text { font-size: 14px; }
+
+    /* Work: the viewport-height hover-expand accordion */
+    .work-section {
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 60px);
+        min-height: 620px;
+    }
+    .work-panels { flex: 1; min-height: 0; flex-direction: row; margin-top: 46px; }
+    .work-panel {
+        flex: 0 0 180px;
+        border-bottom: 0;
+        transform: translateZ(0);
+        transition: flex-grow 0.75s var(--ease);
+    }
+    .work-panel.active { flex-grow: 1; }
     .work-content {
-        position: relative;
-        inset: auto;
-        min-width: 0;
-        opacity: 1;
-        transform: none;
-        max-height: 0;
-        padding: 0;
-        overflow: hidden;
-        transition: max-height 0.45s ease, padding 0.35s ease;
+        position: absolute;
+        inset: 0;
+        min-width: 620px;
+        max-height: none;
+        padding: 50px;
+        opacity: 0;
+        transform: translateY(10px);
+        pointer-events: none;
+        transition: opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s;
     }
-    .work-panel.active .work-content { max-height: 1000px; padding: 32px 26px; }
-    .work-head { margin-bottom: 12px; }
-    .work-title { font-size: 22px; }
-    .work-quote { font-size: 14px; }
-    .work-stat-box { padding: 14px 16px; flex: 1 1 auto; }
-    .work-stat-value { font-size: 24px; }
-    .work-stat-sub { font-size: 11px; white-space: normal; }
+    .work-panel.active .work-content {
+        max-height: none;
+        padding: 50px;
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+    .work-arrow {
+        display: block;
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        width: 26px;
+        height: 26px;
+        z-index: 5;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s ease, transform 0.3s ease;
+    }
+    .work-panel.active .work-arrow { opacity: 1; }
+    .work-panel.active:hover .work-arrow { transform: translateX(6px); }
+    .work-bar { display: none; }
+    .work-head { display: flex; margin-bottom: 16px; }
+    .work-title { font-size: clamp(24px, 3vw, 40px); }
+    .work-quote { font-size: 16px; }
+    .work-stat-box { padding: 20px 26px; flex: none; }
+    .work-stat-value { font-size: 34px; }
+    .work-stat-sub { font-size: 13px; white-space: nowrap; }
 
-    .process-grid { grid-template-columns: 1fr; }
+    .process-grid { grid-template-columns: repeat(4, 1fr); gap: 1px; margin-top: 56px; }
 
-    .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .footer-grid { grid-template-columns: 1.6fr repeat(3, 1fr); gap: 40px; }
 }
 
-@media (max-width: 560px) {
-    .talent-media { max-width: 280px; margin: 0 auto; }
-    .talent-image { max-width: 280px; height: auto; }
-    .talent-heading { font-size: 26px; }
-    .talent-body { font-size: 14px; gap: 14px; }
-    .hero-stats { grid-template-columns: 1fr; }
-    .hero-actions .btn { width: 100%; }
-    .skills-grid { grid-template-columns: 1fr; }
-    .footer-grid { grid-template-columns: 1fr; }
-    .footer-bottom { flex-direction: column; align-items: flex-start; }
+/* Narrow desktops / landscape tablets: the expanded work panel doesn't need
+   its desktop min-width, or it would push the row wider than the viewport */
+@media (min-width: 992px) and (max-width: 1180px) {
+    .work-content { min-width: 0; }
 }
 
 /* =============================================================================
@@ -1589,29 +2272,44 @@ section { position: relative; }
 .flip-inner {
     position: relative;
     width: 100%;
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     transform-style: preserve-3d;
     transition: transform 0.7s var(--ease);
 }
 .value-card.is-flipped .flip-inner { transform: rotateY(180deg); }
 
-.flip-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.flip-face {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    box-sizing: border-box;
+}
 .flip-front {
+    width: 100%;
+    height: 100%;
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
+    padding: 38px 26px 28px;
 }
 .flip-back {
     position: absolute;
     inset: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    overflow: hidden;
+    padding: 38px 28px 28px;
     transform: rotateY(180deg);
-    background: linear-gradient(165deg, rgba(255, 77, 4, 0.20) 0%, rgba(22, 22, 29, 0.95) 62%);
-    border-radius: var(--radius);
+    background: linear-gradient(165deg, rgba(255, 77, 4, 0.22) 0%, rgba(22, 22, 29, 0.98) 55%);
+    border-radius: 12px;
+    overflow: hidden;
 }
 
 .flip-index {
@@ -1620,33 +2318,42 @@ section { position: relative; }
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--accent);
-    margin-bottom: 16px;
+    margin-bottom: 12px;
+    flex-shrink: 0;
 }
 .flip-title {
-    font-size: 21px;
-    font-weight: 300;
-    line-height: 1.3;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.35;
     color: var(--text);
     margin-bottom: 12px;
+    flex-shrink: 0;
 }
 .flip-text {
-    font-size: 14px;
+    font-size: 13.5px;
     line-height: 1.65;
-    color: var(--muted);
+    color: rgba(244, 248, 245, 0.85);
+    margin-bottom: 16px;
+    flex: 1;
 }
 
 .flip-btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 7px;
-    margin-top: 20px;
-    padding: 8px 16px;
+    margin-top: auto;
+    margin-bottom: 16px;
+    padding: 9px 20px;
     border: 1px dashed var(--accent-line);
     border-radius: 100px;
     color: var(--accent);
     font-size: 12px;
     font-weight: 500;
     letter-spacing: 0.05em;
+    background: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
     transition: background var(--dur) var(--ease), color var(--dur) var(--ease),
                 border-color var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
@@ -1680,7 +2387,34 @@ section { position: relative; }
     z-index: 1;
 }
 
-/* ── Reduced motion: keep the layout, drop the movement ─────────────────── */
+/* ── Small screens: shallower perspective, less travel (the default) ────── */
+.js-reveal.reveal-3d {
+    transform: translate3d(0, calc(var(--reveal-y, 26px) + var(--lift, 0px)), 0)
+               rotateX(calc(var(--rx-in, 5deg) + var(--rx, 0deg)))
+               rotateY(calc(var(--ry-in, -3deg) + var(--ry, 0deg)));
+}
+[data-depth] { transform: none; }
+.tilt-shine::after { display: none; }
+
+/* ── Desktop: full parallax depth, pointer gloss, deeper entrance tip ───── */
+@media (min-width: 992px) {
+    .js-reveal.reveal-3d {
+        transform:
+            perspective(var(--persp, 1100px))
+            translate3d(0, calc(var(--reveal-y, 26px) + var(--lift, 0px)), 0)
+            rotateX(calc(var(--rx-in, 9deg) + var(--rx, 0deg)))
+            rotateY(calc(var(--ry-in, -5deg) + var(--ry, 0deg)));
+    }
+    [data-depth] {
+        transform: perspective(1100px)
+                    translate3d(0, calc(var(--p, 0) * var(--depth, 40px)), 0)
+                    rotateX(calc(var(--p, 0) * var(--dt, 0deg)));
+    }
+    .tilt-shine::after { display: block; }
+}
+
+/* ── Reduced motion: keep the layout, drop the movement.
+      Last in the cascade so it beats every transform above. ─────────────── */
 @media (prefers-reduced-motion: reduce) {
     .tilt,
     .js-reveal.reveal-3d,
@@ -1689,15 +2423,4 @@ section { position: relative; }
     }
     .js-reveal.reveal-3d { opacity: 1; }
     .hero-canvas { display: none; }
-}
-
-/* ── Small screens: shallower perspective, less travel ──────────────────── */
-@media (max-width: 991px) {
-    .js-reveal.reveal-3d {
-        transform: translate3d(0, calc(var(--reveal-y, 26px) + var(--lift, 0px)), 0)
-                   rotateX(calc(var(--rx-in, 5deg) + var(--rx, 0deg)))
-                   rotateY(calc(var(--ry-in, -3deg) + var(--ry, 0deg)));
-    }
-    [data-depth] { transform: none; }
-    .tilt-shine { display: none; }
 }

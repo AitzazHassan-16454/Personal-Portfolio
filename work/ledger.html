@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ledger — reconciliation engine · Case study · Aria Novak</title>
-<meta name="description" content="How Halcyon's six-hour nightly settlement batch became a streaming pipeline that settles in under two minutes. The brief, the hard part, and the outcome.">
+<title>ContentForge — AI Content &amp; Publishing · Case study · Aitzaz Hassan</title>
+<meta name="description" content="How Boson Studio's ContentForge platform combined Vector RAG, real-time SSE token streaming, and 9-voice WAV audio stitching for enterprise publishing.">
 <meta name="theme-color" content="#16161D">
 
 <!-- Icons -->
@@ -12,18 +12,16 @@
 <link rel="alternate icon" href="../favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 
-<!-- Share cards — these work without a domain (title/description text card). -->
+<!-- Share cards -->
 <meta property="og:type" content="article">
-<meta property="og:site_name" content="Aria Novak">
-<meta property="og:title" content="Ledger — reconciliation engine">
-<meta property="og:description" content="A six-hour nightly settlement batch became a streaming pipeline that settles in under two minutes.">
+<meta property="og:site_name" content="Aitzaz Hassan">
+<meta property="og:title" content="ContentForge — AI Content &amp; Publishing">
+<meta property="og:description" content="Real-time SSE token streaming, Vector RAG retrieval, and dynamic 9-voice WAV audio stitching.">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Ledger — reconciliation engine">
-<meta name="twitter:description" content="A six-hour nightly settlement batch became a streaming pipeline that settles in under two minutes.">
-<!-- TODO: once the site has a domain, add canonical / og:url / og:image here too
-     (see the commented block in index.html and the README). -->
+<meta name="twitter:title" content="ContentForge — AI Content &amp; Publishing">
+<meta name="twitter:description" content="Real-time SSE token streaming, Vector RAG retrieval, and dynamic 9-voice WAV audio stitching.">
 
-<!-- Poppins is self-hosted (css/fonts.css + fonts/) — no third-party origin. -->
+<!-- Poppins self-hosted -->
 <link rel="preload" href="../fonts/poppins-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../css/fonts.css">
 <link rel="stylesheet" href="../css/style.css">
@@ -34,13 +32,13 @@
 <body>
 
 <!-- ═══════════════════════════════════════════════════════════════════════
-     HEADER — slim variant: this page only needs a way back and a way out.
+     HEADER — slim variant
      ═══════════════════════════════════════════════════════════════════ -->
 <header class="site-header" id="siteHeader">
     <div class="header-inner">
         <a href="../index.html" class="logo">
-            <span class="logo-mark">A</span>
-            Aria&nbsp;Novak
+            <span class="logo-mark">AH</span>
+            Aitzaz&nbsp;Hassan
         </a>
         <nav class="nav site-nav">
             <a class="nav-link" href="../index.html#work">Work</a>
@@ -48,7 +46,7 @@
             <a class="nav-link" href="../index.html#process">Process</a>
             <a class="nav-link" href="../index.html#contact">Contact</a>
         </nav>
-        <a href="mailto:hello@example.com" class="btn" data-contact="email" data-contact-label>hello@example.com</a>
+        <a href="mailto:aitzazhassan16454@gmail.com" class="btn" data-contact="email">Contact</a>
     </div>
 </header>
 
@@ -63,21 +61,21 @@
                 All work
             </a>
 
-            <p class="case-kicker js-reveal">Case study — Halcyon</p>
-            <h1 class="case-title js-reveal" data-depth="16">Ledger<br><b>reconciliation engine</b></h1>
+            <p class="case-kicker js-reveal">Case study — Boson Studio</p>
+            <h1 class="case-title js-reveal" data-depth="16">ContentForge<br><b>AI Content &amp; Publishing</b></h1>
             <p class="case-lede js-reveal">
-                Halcyon's books closed at 02:00 and were readable at 08:00 — six hours of
-                compute producing a number that was already stale, then corrected by hand.
-                I replaced the batch with a streaming pipeline that settles in under two minutes.
+                Enterprise content generation suffered from high wait times and disconnected audio synthesis.
+                I architected a unified platform with Vector RAG, sub-200ms real-time SSE streaming, and
+                client-side binary WAV header stitching across 9 distinct AI voices.
             </p>
 
             <div class="case-rule js-reveal" data-depth="-30"></div>
 
             <dl class="case-meta js-reveal">
-                <div><dt>Role</dt><dd>Principal Engineer</dd></div>
-                <div><dt>Company</dt><dd>Halcyon</dd></div>
-                <div><dt>Year</dt><dd>2024</dd></div>
-                <div><dt>Timeline</dt><dd>6 months</dd></div>
+                <div><dt>Role</dt><dd>Full Stack &amp; AI Developer</dd></div>
+                <div><dt>Company</dt><dd>Boson Studio</dd></div>
+                <div><dt>Year</dt><dd>2025–2026</dd></div>
+                <div><dt>Timeline</dt><dd>Production</dd></div>
             </dl>
         </div>
     </section>
@@ -86,11 +84,11 @@
     <section class="case-quote-band">
         <div class="container">
             <blockquote class="case-quote js-reveal" data-depth="-44" data-tilt="4">
-                "We replaced a nightly batch that took six hours with a streaming
-                pipeline that settles in under two minutes. Nobody on the finance
-                team opens the old spreadsheet anymore."
+                "ContentForge eliminated generation lag with live token streaming and Vector RAG.
+                The binary WAV audio stitcher gives our creators seamless multi-voice narration
+                directly in the browser."
             </blockquote>
-            <p class="case-quote-author js-reveal">Principal Engineer · Halcyon</p>
+            <p class="case-quote-author js-reveal">Lead Architect · Boson Studio</p>
         </div>
     </section>
 
@@ -98,27 +96,24 @@
     <section class="case-section">
         <div class="container case-grid">
             <div class="case-label js-reveal">01 — The brief
-                <span>Why a six-hour batch was a business problem, not a compute problem.</span>
+                <span>Why traditional blocking web requests fail content teams.</span>
             </div>
             <div class="case-body js-reveal">
                 <p>
-                    Every night at 02:00 a job woke up, re-read the entire day's transactions,
-                    re-matched them against four bank feeds and wrote a fresh settlement file.
-                    It ran until roughly 08:00. The result was correct when it landed and
-                    wrong by the time anyone opened it.
+                    Content creators and publishers required high-speed, factually grounded article drafts
+                    along with synchronized multi-character narration. Legacy AI web tools forced users to
+                    wait 15 to 30 seconds for an entire generation to finish before rendering anything. If a
+                    generation failed or drifted off-topic, the entire round-trip was wasted.
                 </p>
                 <p>
-                    The match rate had plateaued around <strong>99.7%</strong>. The remaining
-                    0.3% went into a spreadsheet that two people corrected each morning — and
-                    because the batch rebuilt everything from scratch, every correction had to
-                    be re-derived the next night. Nobody trusted the number, so half the finance
-                    team kept their own.
+                    Furthermore, voice generation required switching to external third-party tools, generating
+                    audio snippets for individual paragraphs, and manually assembling them in audio editors.
+                    Enterprises also needed strict workspace boundaries and token budget limits.
                 </p>
                 <p>
-                    The ask was "make the batch faster". The actual problem was that
-                    <strong>reconciliation was being treated as a report when it is a continuous
-                    process</strong>. Once you see it that way, the batch stops being the
-                    right shape.
+                    The brief was to engineer an <strong>end-to-end publishing studio</strong>: sub-second
+                    token streaming via Server-Sent Events (SSE), Vector RAG context retrieval, continuous
+                    9-voice WAV audio generation stitched right in the browser, and enterprise Spatie RBAC.
                 </p>
             </div>
         </div>
@@ -128,31 +123,29 @@
     <section class="case-section">
         <div class="container case-grid">
             <div class="case-label js-reveal">02 — What I built
-                <span>An incremental matcher, an explainable rule engine, and a queue that drains itself.</span>
+                <span>Vector RAG engine, live SSE token pipeline, binary WAV stitcher, and Spatie RBAC.</span>
             </div>
             <div class="case-body js-reveal">
                 <p>
-                    Ledger processes entries as they arrive instead of re-reading the day.
-                    State is kept per account, so a match that completes today can be extended
-                    tomorrow without replaying history.
+                    ContentForge combines a robust Laravel 13 backend with a reactive Vue 3 and Inertia.js
+                    frontend, providing authors with an instantaneous, collaborative writing studio.
                 </p>
                 <ul class="case-list">
-                    <li><b>Deterministic rule engine</b> — exact match first, then fuzzy
-                        candidates, then a confidence band. Every decision stores the rule that
-                        produced it, so "why did these pair?" is a query, not an investigation.</li>
-                    <li><b>Exception queue</b> for the 0.3% — keyboard-first triage with a
-                        one-click resubmit that writes back to the ledger and trains the next
-                        night's thresholds.</li>
-                    <li><b>Seven-year audit trail</b> — every match, override and source-feed
-                        version, retained and queryable. Finance stopped asking for exports.</li>
-                    <li><b>Shadow backfill</b> — fourteen months of history replayed through
-                        the new engine while the old batch kept running, so cutover was a
-                        configuration change rather than a weekend.</li>
+                    <li><b>Vector RAG Engine</b> — Ingests enterprise documents into high-dimensional vector
+                        embeddings. Semantic search retrieves high-relevance chunks to ground LLM generation
+                        and eliminate hallucinations.</li>
+                    <li><b>Server-Sent Events (SSE) Streaming</b> — Live token-by-token streaming from
+                        the Laravel pipeline directly into Vue 3 reactive editors, reducing time-to-first-token
+                        to under 200 milliseconds.</li>
+                    <li><b>9-Voice WAV TTS Stitching</b> — Dynamic binary audio concatenation that merges
+                        multi-character dialogue snippets into a continuous single WAV audio file without
+                        browser stutter.</li>
+                    <li><b>Spatie RBAC Multi-Tenancy</b> — Granular role management, team permissions,
+                        audit trails, and per-workspace token allocation quotas.</li>
                 </ul>
                 <p>
-                    The interface is deliberately unglamorous: one screen, one queue, no
-                    dashboards to interpret. It was designed against the actual morning routine
-                    of the two people who used to own the spreadsheet.
+                    The UI combines dark editorial ergonomics with live typing feedback, audio waveforms,
+                    and instant one-click exports to markdown, HTML, and audio podcasts.
                 </p>
             </div>
         </div>
@@ -162,32 +155,31 @@
     <section class="case-section">
         <div class="container case-grid">
             <div class="case-label js-reveal">03 — The hard part
-                <span>At-least-once delivery, order-dependent matching, and a cutover nobody could feel.</span>
+                <span>Binary WAV header assembly, resilient SSE pipes, and context pruning.</span>
             </div>
             <div class="case-body js-reveal">
-                <h3>Replays have to be boring</h3>
+                <h3>Binary WAV header stitching in real time</h3>
                 <p>
-                    Bank feeds re-deliver, reorder and occasionally contradict themselves.
-                    The matcher is stateful, so a naive replay double-counts. Every write is an
-                    idempotent upsert keyed on <strong>(feed, sequence, entry id)</strong> —
-                    reprocessing a window changes nothing, which is what made backfill safe to
-                    run twice.
+                    Synthesizing dialogue across 9 distinct AI voices produces separate PCM audio chunks.
+                    Decoding and re-encoding audio in the browser induces CPU spikes and introduces audible clicks
+                    at slice boundaries. I implemented a low-level binary parser that strips individual RIFF/WAV
+                    headers, calculates accurate byte lengths, and rewrites a single canonical 44-byte WAV header
+                    over the concatenated PCM stream on the fly.
                 </p>
 
-                <h3>Partial matches cross midnight</h3>
+                <h3>Resilient long-lived SSE connections</h3>
                 <p>
-                    A settlement can be half-matched at 23:58 and completed at 00:04. State had
-                    to be sharded by account, checkpointed, and rebuildable without pausing
-                    intake — otherwise the fix for one edge case becomes a nightly outage.
+                    PHP-FPM and Nginx typically buffer output before flushing to the client. I configured
+                    dedicated non-buffering SSE endpoints with explicit buffer flushing and heartbeat frames.
+                    Vue 3 handles client-side connection drops with automatic reconnection and draft resumption,
+                    so authors never lose content during intermittent connectivity.
                 </p>
 
-                <h3>Nobody adopts a number they can't check</h3>
+                <h3>Context thresholding and token efficiency</h3>
                 <p>
-                    The engine ran in <strong>shadow mode</strong> alongside the old batch for
-                    three weeks, diffing output line by line. We cut over only once it disagreed
-                    fewer than five times in a million — and when it did disagree, the audit
-                    trail explained the rule that caused it. That diff is what convinced finance,
-                    not the latency figure.
+                    Feeding raw vector search matches into LLM prompts quickly inflates token costs and slows
+                    generation. I created an intelligent context pruning layer that ranks similarity scores,
+                    strips boilerplate, and constructs dense, compact system contexts.
                 </p>
             </div>
         </div>
@@ -197,38 +189,37 @@
     <section class="case-section case-outcome">
         <div class="container case-grid">
             <div class="case-label js-reveal">04 — Outcome
-                <span>Six hours to two minutes, and a spreadsheet nobody opens.</span>
+                <span>Instant visual feedback, fluid audio synthesis, and enterprise-grade security.</span>
             </div>
             <div class="case-body js-reveal">
                 <div class="work-stats">
                     <div class="work-stat-box">
-                        <div class="work-stat-value">180×</div>
-                        <div class="work-stat-sub">Faster settlement</div>
+                        <div class="work-stat-value">9 Voices</div>
+                        <div class="work-stat-sub">WAV TTS stitching</div>
                     </div>
                     <div class="work-stat-box">
-                        <div class="work-stat-value">-94%</div>
-                        <div class="work-stat-sub">Compute cost</div>
+                        <div class="work-stat-value">&lt;200ms</div>
+                        <div class="work-stat-sub">SSE token stream</div>
                     </div>
                     <div class="work-stat-box">
-                        <div class="work-stat-value">0</div>
-                        <div class="work-stat-sub">Manual corrections</div>
+                        <div class="work-stat-value">100%</div>
+                        <div class="work-stat-sub">Spatie RBAC secure</div>
                     </div>
                 </div>
 
                 <p>
-                    Settlement went from six hours to under two minutes. The compute bill for
-                    that path fell <strong>94%</strong> because the nightly cluster was
-                    decommissioned entirely rather than resized.
+                    Content generation felt instantaneous because writers read as the AI generated.
+                    Narration workflows that used to take hours of manual assembly were reduced to a single
+                    click with zero browser lockup.
                 </p>
                 <p>
-                    The exception queue drains itself — <strong>zero manual corrections</strong>
-                    have been needed since cutover. The spreadsheet is gone, and the number the
-                    finance team reads at 09:00 is the same one the pipeline settled at 08:58.
+                    The platform successfully handled multi-tenant enterprise deployments at Boson Studio
+                    with rigorous Spatie RBAC permission isolation across all published materials.
                 </p>
 
                 <ul class="case-tags">
-                    <li>Go</li><li>PostgreSQL</li><li>TypeScript</li><li>React</li>
-                    <li>Kubernetes</li><li>CI/CD</li>
+                    <li>Laravel 13</li><li>Vue 3</li><li>Inertia.js</li><li>Server-Sent Events</li>
+                    <li>Vector RAG</li><li>TTS &amp; Audio</li><li>Spatie RBAC</li><li>MySQL</li>
                 </ul>
             </div>
         </div>
@@ -239,11 +230,11 @@
         <div class="container case-grid">
             <a class="js-reveal" href="relay.html">
                 <div class="dir">← Previous case study</div>
-                <div class="name">Relay — messaging infrastructure</div>
+                <div class="name">AI E-Commerce — Semantic Search &amp; Agents</div>
             </a>
             <a class="js-reveal" href="atlas.html">
                 <div class="dir">Next case study →</div>
-                <div class="name">Atlas — observability console</div>
+                <div class="name">Nova AI — Chatbot Platform</div>
             </a>
         </div>
     </nav>
@@ -251,10 +242,10 @@
     <!-- ── CTA ── -->
     <section class="cta-band" id="contact">
         <div class="container">
-            <h2 class="cta-title js-reveal">Got a problem worth <b>solving properly?</b></h2>
+            <h2 class="cta-title js-reveal">Got an AI platform worth <b>building properly?</b></h2>
             <p class="cta-text js-reveal">Send the brief, the rough version, or one paragraph. All three are fine.</p>
             <div class="js-reveal" style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
-                <a href="mailto:hello@example.com" class="btn btn--solid" data-contact="email" data-contact-label>hello@example.com</a>
+                <a href="mailto:aitzazhassan16454@gmail.com" class="btn btn--solid" data-contact="email" data-contact-label>aitzazhassan16454@gmail.com</a>
                 <a href="../index.html#work" class="btn">Browse the work</a>
             </div>
         </div>
@@ -269,12 +260,12 @@
 <footer class="site-footer">
     <div class="container">
         <div class="footer-bottom">
-            <span>© 2026 Aria Novak. Built from scratch.</span>
+            <span>© 2026 Aitzaz Hassan. Built from scratch.</span>
             <div style="display:flex;gap:18px;flex-wrap:wrap">
                 <a href="../index.html#work" class="footer-link">All work</a>
-                <a href="#" class="footer-link" data-contact="github">GitHub</a>
+                <a href="https://github.com/aitzazhassan" class="footer-link" data-contact="github">GitHub</a>
                 <a href="#" class="footer-link" data-contact="linkedin">LinkedIn</a>
-                <a href="mailto:hello@example.com" class="footer-link" data-contact="email">Email</a>
+                <a href="mailto:aitzazhassan16454@gmail.com" class="footer-link" data-contact="email">Email</a>
             </div>
         </div>
     </div>

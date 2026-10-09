@@ -79,7 +79,6 @@
         { sel: '.hero-stat',    max: 7,  lift: -4, persp: '850px',  shine: true },
         { sel: '.process-step', max: 8,  lift: -6, persp: '900px' },
         { sel: '.btn',          max: 9,  lift: -4, persp: '700px' },
-        { sel: '.talent-media', max: 7,  lift: -8, persp: '1100px' },
         { sel: '.card',         max: 7,  lift: -6, persp: '950px' }
     ];
 

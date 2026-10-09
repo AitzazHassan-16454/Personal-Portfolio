@@ -172,6 +172,33 @@ there invalidates the whole declaration and you silently get no band at all.
 
 ---
 
+## Responsive architecture
+
+Both stylesheets are **mobile-first**: the base rules target a ~320px screen
+and the layout is rebuilt upward through `min-width` tiers in
+`css/style.css` ("Responsive — mobile-first enhancement tiers"):
+
+| Tier | What it restores |
+|------|------------------|
+| 480px | hero buttons side by side |
+| 560px | 2-up stats/skills/footer, full-size ID badge |
+| 600px | 2-up value cards and process steps |
+| 768px | wider gutters (`--gutter`), roomier section rhythm, full-size controls |
+| 992px | the desktop composition — multi-column grids, mega panel, hover interactions, viewport-height work accordion |
+
+`992px` is the desktop hinge everywhere, including JS: `main.js` and
+`motion3d.js` use `innerWidth <= 991` / `< 992` for the drawer, the work
+accordion mode and the hero canvas, so keep them in sync if you move it.
+
+Touch gets first-class affordances instead of dead hover states: team cards
+render their info panel and colour photo permanently, and each work panel
+carries a `.work-bar` — a tappable title row with an `aria-expanded` chevron
+(hidden on desktop, where the hover accordion and the overlay `.work-head`
+take over). The mega panel measures the header's real bottom edge on open
+(`--panel-top`), so no breakpoint hardcodes the header's height.
+
+---
+
 ## No third-party origins
 
 Runtime requests: **0**.

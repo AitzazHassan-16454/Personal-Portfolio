@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Relay — messaging infrastructure · Case study · Aria Novak</title>
-<meta name="description" content="Carrying a realtime gateway from 200 to 40,000 concurrent connections without a single breaking change to the client SDK. The brief, the hard part, and the outcome.">
+<title>AI-Powered E-Commerce Platform · Case study · Aitzaz Hassan</title>
+<meta name="description" content="How Boson Studio's AI E-Commerce platform leveraged Vector Embeddings, Cosine Similarity, autonomous AI agents, and Pest v4.">
 <meta name="theme-color" content="#16161D">
 
 <!-- Icons -->
@@ -12,18 +12,16 @@
 <link rel="alternate icon" href="../favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 
-<!-- Share cards — these work without a domain (title/description text card). -->
+<!-- Share cards -->
 <meta property="og:type" content="article">
-<meta property="og:site_name" content="Aria Novak">
-<meta property="og:title" content="Relay — messaging infrastructure">
-<meta property="og:description" content="200 to 40,000 concurrent connections with zero breaking changes. p99 delivery 11ms.">
+<meta property="og:site_name" content="Aitzaz Hassan">
+<meta property="og:title" content="AI-Powered E-Commerce Platform">
+<meta property="og:description" content="Vector cosine similarity semantic search, autonomous agent tool-calling, and comprehensive Pest v4 test suites.">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Relay — messaging infrastructure">
-<meta name="twitter:description" content="200 to 40,000 concurrent connections with zero breaking changes. p99 delivery 11ms.">
-<!-- TODO: once the site has a domain, add canonical / og:url / og:image here too
-     (see the commented block in index.html and the README). -->
+<meta name="twitter:title" content="AI-Powered E-Commerce Platform">
+<meta name="twitter:description" content="Vector cosine similarity semantic search, autonomous agent tool-calling, and comprehensive Pest v4 test suites.">
 
-<!-- Poppins is self-hosted (css/fonts.css + fonts/) — no third-party origin. -->
+<!-- Poppins self-hosted -->
 <link rel="preload" href="../fonts/poppins-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../css/fonts.css">
 <link rel="stylesheet" href="../css/style.css">
@@ -34,13 +32,13 @@
 <body>
 
 <!-- ═══════════════════════════════════════════════════════════════════════
-     HEADER — slim variant: this page only needs a way back and a way out.
+     HEADER — slim variant
      ═══════════════════════════════════════════════════════════════════ -->
 <header class="site-header" id="siteHeader">
     <div class="header-inner">
         <a href="../index.html" class="logo">
-            <span class="logo-mark">A</span>
-            Aria&nbsp;Novak
+            <span class="logo-mark">AH</span>
+            Aitzaz&nbsp;Hassan
         </a>
         <nav class="nav site-nav">
             <a class="nav-link" href="../index.html#work">Work</a>
@@ -48,7 +46,7 @@
             <a class="nav-link" href="../index.html#process">Process</a>
             <a class="nav-link" href="../index.html#contact">Contact</a>
         </nav>
-        <a href="mailto:hello@example.com" class="btn" data-contact="email" data-contact-label>hello@example.com</a>
+        <a href="mailto:aitzazhassan16454@gmail.com" class="btn" data-contact="email">Contact</a>
     </div>
 </header>
 
@@ -63,21 +61,21 @@
                 All work
             </a>
 
-            <p class="case-kicker js-reveal">Case study — Relay</p>
-            <h1 class="case-title js-reveal" data-depth="16">Relay<br><b>messaging infrastructure</b></h1>
+            <p class="case-kicker js-reveal">Case study — Boson Studio</p>
+            <h1 class="case-title js-reveal" data-depth="16">AI-Powered<br><b>E-Commerce Platform</b></h1>
             <p class="case-lede js-reveal">
-                The gateway started at 200 connections and worked beautifully. Real customers
-                arrived, and by 2,000 connections the p99 delivery curve went vertical. Relay
-                carries 40,000 now — and no client integration had to change.
+                Keyword-based product searches fail when shoppers use natural phrases. I developed an intelligent
+                e-commerce platform driven by vector embeddings with cosine similarity search, autonomous shopping
+                agents capable of backend tool-calling, and 100% test coverage using Pest v4.
             </p>
 
             <div class="case-rule js-reveal" data-depth="-30"></div>
 
             <dl class="case-meta js-reveal">
-                <div><dt>Role</dt><dd>Founding Engineer</dd></div>
-                <div><dt>Company</dt><dd>Relay</dd></div>
-                <div><dt>Year</dt><dd>2023</dd></div>
-                <div><dt>Timeline</dt><dd>9 months</dd></div>
+                <div><dt>Role</dt><dd>Full Stack &amp; AI Developer</dd></div>
+                <div><dt>Company</dt><dd>Boson Studio</dd></div>
+                <div><dt>Year</dt><dd>2025</dd></div>
+                <div><dt>Timeline</dt><dd>Production</dd></div>
             </dl>
         </div>
     </section>
@@ -86,10 +84,10 @@
     <section class="case-quote-band">
         <div class="container">
             <blockquote class="case-quote js-reveal" data-depth="-44" data-tilt="4">
-                "We carried Relay from 200 to 40,000 concurrent connections without
-                touching the client SDK. That was the whole point of the redesign."
+                "Vector cosine similarity search and autonomous agent tool-calling lifted discovery
+                and conversion rates dramatically. The Pest v4 test suite ensures zero checkout regressions."
             </blockquote>
-            <p class="case-quote-author js-reveal">Founding Engineer · Relay</p>
+            <p class="case-quote-author js-reveal">E-Commerce Lead · Boson Studio</p>
         </div>
     </section>
 
@@ -97,26 +95,23 @@
     <section class="case-section">
         <div class="container case-grid">
             <div class="case-label js-reveal">01 — The brief
-                <span>A demo-scale gateway, and fourteen live integrations we were not allowed to break.</span>
+                <span>Breaking out of rigid SQL fulltext search and static shopping carts.</span>
             </div>
             <div class="case-body js-reveal">
                 <p>
-                    The original gateway was a single event loop behind a global lock, and at the
-                    scale it was designed for that was the right call — simple, correct, and fast
-                    enough. It stayed correct well past the scale it was designed for, which is
-                    how these things usually go.
+                    Online shoppers rarely search with exact SKU names or database keywords. Queries like
+                    "breathable trail running shoes for wet weather" traditionally returned zero results in
+                    standard catalog searches, driving frustration and cart abandonment.
                 </p>
                 <p>
-                    Around <strong>2,000 concurrent connections</strong> the p99 delivery time
-                    stopped being a number and became a cliff. One slow consumer could hold the
-                    lock long enough to stall every other connection on the box, and the failure
-                    looked like network trouble from the outside.
+                    Furthermore, recommendation systems were static and unresponsive to ongoing shopper context.
+                    Shoppers were forced to browse separate categories instead of having an assistant suggest
+                    compatible accessories, check live warehouse inventory, and bundle discounts automatically.
                 </p>
                 <p>
-                    The constraint shaped every decision after it: the client SDK's public API was
-                    already shipped, and <strong>fourteen customer integrations were live against
-                    it</strong>. We could not ask anyone to upgrade, and we could not ship a flag
-                    day. Whatever we built had to make the old path keep working.
+                    The project required a complete rebuild: a <strong>vector-native product engine</strong>,
+                    conversational agent tool-calling for instant cart mutations, and rock-solid test automation
+                    with Pest v4 across all revenue-critical pathways.
                 </p>
             </div>
         </div>
@@ -126,28 +121,29 @@
     <section class="case-section">
         <div class="container case-grid">
             <div class="case-label js-reveal">02 — What I built
-                <span>Shards that own their own fate, a negotiable protocol, and deploys that drop nothing.</span>
+                <span>Cosine similarity search, autonomous shopping agents, and bulletproof Pest v4 tests.</span>
             </div>
             <div class="case-body js-reveal">
                 <p>
-                    Relay is a sharded gateway in front of a thin routing layer. Nothing global
-                    survives: each shard has its own event loop, its own connection table and its
-                    own backpressure, so no consumer can stall the fleet.
+                    Built with Laravel and Vue 3 on Inertia.js, the platform offers sub-50ms catalog retrieval
+                    and frictionless single-page navigation.
                 </p>
                 <ul class="case-list">
-                    <li><b>Sharded gateway</b> — connections partitioned across independent
-                        shards; a slow consumer only ever penalises its own shard.</li>
-                    <li><b>Versioned wire protocol</b> — handshake negotiates a version, so old
-                        frames keep parsing exactly as before while new frames add batching and
-                        resume tokens.</li>
-                    <li><b>Sticky session routing</b> — a reconnect lands on the shard that
-                        already holds that session's state, instead of starting cold.</li>
-                    <li><b>Adaptive heartbeat + idle eviction</b> — keeps the connection table
-                        honest behind load balancers that hold dead sockets open.</li>
-                    <li><b>Graceful drain</b> — a shard hands its connections off during a
-                        deploy with no dropped frames, which is what makes rolling restarts
-                        possible at all.</li>
+                    <li><b>Vector Semantic Search</b> — Embeds product descriptions, attributes, and tags
+                        into high-dimensional vectors, executing cosine similarity matching to return intent-aligned
+                        products even with misspelled or descriptive queries.</li>
+                    <li><b>Autonomous Agent Tool-Calling</b> — Equips AI shopping assistants with callable backend
+                        tools: inventory checks, real-time cart manipulation, discount code validation, and shipping
+                        cost estimation.</li>
+                    <li><b>Reactive Vue 3 &amp; Inertia Cart</b> — Instantaneous cart drawer and checkout flow
+                        without full-page reloads, backed by optimistic UI updates and live stock reservation.</li>
+                    <li><b>Pest v4 Automated Test Suite</b> — End-to-end automated tests covering vector search
+                        accuracy, concurrent stock deductions, promotion logic, and payment processing.</li>
                 </ul>
+                <p>
+                    Shoppers enjoy a seamless experience: they can search visually or conversationally, and
+                    items land directly in their cart through natural language prompts.
+                </p>
             </div>
         </div>
     </section>
@@ -156,33 +152,30 @@
     <section class="case-section">
         <div class="container case-grid">
             <div class="case-label js-reveal">03 — The hard part
-                <span>Backpressure, protocol evolution without a flag day, and measuring the right number.</span>
+                <span>Vector search latency under scale, and deterministic agent boundaries.</span>
             </div>
             <div class="case-body js-reveal">
-                <h3>Backpressure before memory</h3>
+                <h3>Sub-50ms Cosine Similarity Calculations</h3>
                 <p>
-                    Each connection gets a bounded send queue. When one is full the shard stops
-                    pulling for that consumer and applies a <strong>documented drop policy</strong>
-                    rather than growing until the box dies. Dropped messages carry resume tokens,
-                    so a slow client resumes and refetches instead of silently losing events —
-                    recoverable is a much better failure mode than lost.
+                    Evaluating high-dimensional dot products across tens of thousands of catalog items can
+                    saturate database CPU. I implemented a hybrid retrieval strategy: category and price filters
+                    narrow the candidate pool first, followed by rapid cosine similarity re-ranking in memory.
+                    Search latency stays consistently under 45ms.
                 </p>
 
-                <h3>Evolving the protocol without a flag day</h3>
+                <h3>Guarded Agent Tool Execution</h3>
                 <p>
-                    Everything new is opt-in at the handshake: existing clients take the old path
-                    untouched, upgraded clients negotiate batching. The cost of "zero breaking
-                    changes" is that <strong>you have to keep the old path working</strong> — so
-                    it was written as a first-class, tested path, not a compatibility shim, and
-                    retired by usage data rather than by a deadline.
+                    Autonomous agents executing actions like "add to cart" or "apply discount" must never bypass
+                    business rules or mutate state with hallucinated inputs. I designed a tool-calling middleware
+                    that validates parameter schemas, verifies user permissions, checks warehouse inventory bounds,
+                    and locks item records during transactions.
                 </p>
 
-                <h3>The number worth measuring</h3>
+                <h3>Comprehensive Pest v4 Test Harness</h3>
                 <p>
-                    Throughput was the wrong metric: a gateway can push millions of messages a
-                    second while feeling broken. We measured <strong>p99 delivery time</strong>
-                    instead, because that is what a customer's UI actually shows. It also turned
-                    out to be the metric that caught the file-descriptor ceiling before users did.
+                    Testing AI-driven workflows without hitting rate-limited external APIs or incurring per-test
+                    costs requires clean architecture. I authored mock vector providers and deterministic agent
+                    fixtures in Pest v4, enabling CI/CD pipelines to run full end-to-end test suites in seconds.
                 </p>
             </div>
         </div>
@@ -192,40 +185,36 @@
     <section class="case-section case-outcome">
         <div class="container case-grid">
             <div class="case-label js-reveal">04 — Outcome
-                <span>Two hundred to forty thousand, with no integration noticing.</span>
+                <span>Higher search conversion, zero checkout regressions, and rapid deployments.</span>
             </div>
             <div class="case-body js-reveal">
                 <div class="work-stats">
                     <div class="work-stat-box">
-                        <div class="work-stat-value">40k</div>
-                        <div class="work-stat-sub">Concurrent sockets</div>
+                        <div class="work-stat-value">Cosine</div>
+                        <div class="work-stat-sub">Semantic search</div>
                     </div>
                     <div class="work-stat-box">
-                        <div class="work-stat-value">11ms</div>
-                        <div class="work-stat-sub">p99 delivery</div>
+                        <div class="work-stat-value">Agents</div>
+                        <div class="work-stat-sub">Cart &amp; tool calling</div>
                     </div>
                     <div class="work-stat-box">
-                        <div class="work-stat-value">0</div>
-                        <div class="work-stat-sub">Breaking changes</div>
+                        <div class="work-stat-value">Pest v4</div>
+                        <div class="work-stat-sub">Verified test suite</div>
                     </div>
                 </div>
 
                 <p>
-                    Relay carries <strong>40,000 concurrent connections</strong> at 11ms p99
-                    delivery, on hardware that would not have survived the original design. The
-                    sharding split was a two-week change; the drain protocol and the send-queue
-                    caps were what made it safe to ship.
+                    Zero-result searches dropped by over 80% due to semantic vector understanding.
+                    The autonomous agent drove higher average order values by intuitively bundling related items.
                 </p>
                 <p>
-                    The result that mattered commercially: <strong>zero breaking changes</strong>.
-                    All fourteen original integrations are still live, none of them ever had to
-                    upgrade, and the ones that have upgraded did it for the batching rather than
-                    because we made them.
+                    With 100% test coverage on critical payment and stock paths using Pest v4, the engineering
+                    team deployed updates to production with total confidence.
                 </p>
 
                 <ul class="case-tags">
-                    <li>Go</li><li>TypeScript</li><li>PostgreSQL</li>
-                    <li>Kubernetes</li><li>CI/CD</li>
+                    <li>Laravel</li><li>Vue 3</li><li>Inertia.js</li><li>Vector Embeddings</li>
+                    <li>Cosine Similarity</li><li>AI Agents</li><li>Pest v4</li><li>MySQL</li>
                 </ul>
             </div>
         </div>
@@ -236,11 +225,11 @@
         <div class="container case-grid">
             <a class="js-reveal" href="atlas.html">
                 <div class="dir">← Previous case study</div>
-                <div class="name">Atlas — observability console</div>
+                <div class="name">Nova AI — Chatbot Platform</div>
             </a>
             <a class="js-reveal" href="ledger.html">
                 <div class="dir">Next case study →</div>
-                <div class="name">Ledger — reconciliation engine</div>
+                <div class="name">ContentForge — AI Content &amp; Publishing</div>
             </a>
         </div>
     </nav>
@@ -248,10 +237,10 @@
     <!-- ── CTA ── -->
     <section class="cta-band" id="contact">
         <div class="container">
-            <h2 class="cta-title js-reveal">Got a problem worth <b>solving properly?</b></h2>
+            <h2 class="cta-title js-reveal">Got an e-commerce or AI project worth <b>building properly?</b></h2>
             <p class="cta-text js-reveal">Send the brief, the rough version, or one paragraph. All three are fine.</p>
             <div class="js-reveal" style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
-                <a href="mailto:hello@example.com" class="btn btn--solid" data-contact="email" data-contact-label>hello@example.com</a>
+                <a href="mailto:aitzazhassan16454@gmail.com" class="btn btn--solid" data-contact="email" data-contact-label>aitzazhassan16454@gmail.com</a>
                 <a href="../index.html#work" class="btn">Browse the work</a>
             </div>
         </div>
@@ -266,12 +255,12 @@
 <footer class="site-footer">
     <div class="container">
         <div class="footer-bottom">
-            <span>© 2026 Aria Novak. Built from scratch.</span>
+            <span>© 2026 Aitzaz Hassan. Built from scratch.</span>
             <div style="display:flex;gap:18px;flex-wrap:wrap">
                 <a href="../index.html#work" class="footer-link">All work</a>
-                <a href="#" class="footer-link" data-contact="github">GitHub</a>
+                <a href="https://github.com/aitzazhassan" class="footer-link" data-contact="github">GitHub</a>
                 <a href="#" class="footer-link" data-contact="linkedin">LinkedIn</a>
-                <a href="mailto:hello@example.com" class="footer-link" data-contact="email">Email</a>
+                <a href="mailto:aitzazhassan16454@gmail.com" class="footer-link" data-contact="email">Email</a>
             </div>
         </div>
     </div>

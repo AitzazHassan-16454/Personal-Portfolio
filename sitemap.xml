@@ -1,28 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  TODO: the site is not deployed yet, so every <loc> below uses the
-  https://example.com placeholder. Replace it with the real origin in this
-  file and in robots.txt, then uncomment canonical / og:url / og:image in
-  index.html (and in the three work/*.html pages).
--->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://example.com/</loc>
+    <loc>https://aitzazhassan-16454.github.io/Personal-Portfolio/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://example.com/work/ledger.html</loc>
+    <loc>https://aitzazhassan-16454.github.io/Personal-Portfolio/work/ledger.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://example.com/work/atlas.html</loc>
+    <loc>https://aitzazhassan-16454.github.io/Personal-Portfolio/work/atlas.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://example.com/work/relay.html</loc>
+    <loc>https://aitzazhassan-16454.github.io/Personal-Portfolio/work/relay.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.8</priority>
   </url>

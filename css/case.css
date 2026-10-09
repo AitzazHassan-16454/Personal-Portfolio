@@ -15,7 +15,7 @@
 }
 
 /* ── Hero ───────────────────────────────────────────────────────────────── */
-.case-hero { padding: 64px 0 0; }
+.case-hero { padding: 44px 0 0; }
 
 .case-crumb {
     display: inline-flex;
@@ -64,10 +64,10 @@
     background: var(--case-accent);
 }
 
-/* ── Fact strip ─────────────────────────────────────────────────────────── */
+/* ── Fact strip — 1-up on phones, wider grids from 560px up ─────────────── */
 .case-meta {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     gap: 1px;
     background: var(--line);
     border: 1px solid var(--line);
@@ -75,7 +75,7 @@
     overflow: hidden;
     margin-top: 34px;
 }
-.case-meta > div { background: var(--bg); padding: 18px 22px; }
+.case-meta > div { background: var(--bg); padding: 14px 18px; }
 .case-meta dt {
     font-size: 11px;
     letter-spacing: 0.13em;
@@ -87,8 +87,8 @@
 
 /* ── Client quote band ──────────────────────────────────────────────────── */
 .case-quote-band {
-    margin-top: 80px;
-    padding: 74px 0;
+    margin-top: 56px;
+    padding: 54px 0;
     background-image: linear-gradient(rgba(3, 3, 3, 0.30), rgba(3, 3, 3, 0.30)),
                       var(--case-accent);
 }
@@ -111,22 +111,20 @@
 
 /* ── Body sections ──────────────────────────────────────────────────────── */
 .case-section {
-    padding: 84px 0;
+    padding: 58px 0;
     border-top: 1px solid var(--line);
 }
 .case-section:first-of-type { border-top: 0; }
 
+/* Stacked on phones; the sticky label rail returns from 768px up */
 .case-grid {
     display: grid;
-    grid-template-columns: 240px minmax(0, 1fr);
-    gap: 56px;
+    grid-template-columns: 1fr;
+    gap: 22px;
     align-items: start;
 }
 
-/* Sticky so the section label tracks you through long prose */
 .case-label {
-    position: sticky;
-    top: 116px;
     font-size: 12px;
     font-weight: 500;
     letter-spacing: 0.16em;
@@ -138,7 +136,7 @@
     font-size: 11px;
     letter-spacing: 0.1em;
     color: var(--muted);
-    margin-top: 10px;
+    margin-top: 6px;
     text-transform: none;
     font-weight: 300;
     line-height: 1.6;
@@ -146,7 +144,7 @@
 
 .case-body { max-width: 740px; }
 .case-body p {
-    font-size: 17px;
+    font-size: 16px;
     line-height: 1.78;
     color: var(--muted);
     margin-bottom: 20px;
@@ -169,7 +167,7 @@
     position: relative;
     padding-left: 26px;
     margin-bottom: 15px;
-    font-size: 17px;
+    font-size: 16px;
     line-height: 1.7;
     color: var(--muted);
 }
@@ -205,12 +203,12 @@
     color: var(--muted);
 }
 
-/* ── Next / previous ────────────────────────────────────────────────────── */
+/* ── Next / previous — stacked on phones ────────────────────────────────── */
 .case-next {
-    padding: 70px 0;
+    padding: 56px 0;
     border-top: 1px solid var(--line);
 }
-.case-next .case-grid { gap: 24px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.case-next .case-grid { gap: 16px; grid-template-columns: minmax(0, 1fr); }
 .case-next a {
     display: block;
     border: 1px solid var(--line);
@@ -242,23 +240,48 @@
 .case-next .blank { border-style: dashed; pointer-events: none; opacity: 0.45; }
 
 /* ── Sub-page header/footer shims ───────────────────────────────────────── */
-.site-nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-.site-header .btn { padding: 10px 22px; }
+/* These pages carry no drawer, so on phones the link row wraps onto a second
+   line inside the pill instead of disappearing. */
+.site-header .header-inner { flex-wrap: wrap; row-gap: 10px; }
+.site-nav {
+    display: flex;
+    order: 3;
+    width: 100%;
+    align-items: center;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.site-nav::-webkit-scrollbar { height: 0; }
+.site-nav .nav-link { padding: 6px 12px; font-size: 13px; white-space: nowrap; }
+.site-header .btn { padding: 8px 18px; font-size: 13px; flex-shrink: 0; }
 
-/* ── Responsive ─────────────────────────────────────────────────────────── */
-@media (max-width: 991px) {
-    .case-hero { padding-top: 44px; }
-    .case-grid { grid-template-columns: 1fr; gap: 22px; }
-    .case-label { position: static; }
-    .case-label span { margin-top: 6px; }
+/* ── Responsive — mobile-first ──────────────────────────────────────────── */
+@media (min-width: 560px) {
     .case-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .case-quote-band { margin-top: 56px; padding: 54px 0; }
-    .case-section { padding: 58px 0; }
-    .case-next .case-grid { grid-template-columns: 1fr; }
-    .site-nav { display: none; }
+    .case-meta > div { padding: 18px 22px; }
 }
 
-@media (max-width: 560px) {
-    .case-meta { grid-template-columns: 1fr; }
-    .case-body p, .case-list li { font-size: 16px; }
+@media (min-width: 768px) {
+    .case-hero { padding-top: 64px; }
+    .case-grid { grid-template-columns: 240px minmax(0, 1fr); gap: 56px; }
+    /* Sticky so the section label tracks you through long prose */
+    .case-label { position: sticky; top: 116px; }
+    .case-label span { margin-top: 10px; }
+    .case-body p, .case-list li { font-size: 17px; }
+    .case-meta { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .case-quote-band { margin-top: 80px; padding: 74px 0; }
+    .case-section { padding: 84px 0; }
+    .case-next { padding: 70px 0; }
+    .case-next .case-grid { gap: 24px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    /* Nav returns to the single header row */
+    .site-nav {
+        order: 0;
+        width: auto;
+        overflow-x: visible;
+        flex-wrap: wrap;
+    }
+    .site-nav .nav-link { padding: 10px 16px; font-size: 14px; }
+    .site-header .btn { padding: 10px 22px; }
 }
